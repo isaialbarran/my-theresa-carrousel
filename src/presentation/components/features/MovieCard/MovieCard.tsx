@@ -1,38 +1,39 @@
-import type { Movie } from '../../../../domain/entities/Movie'
-import Card from '../../ui/Card'
-import './MovieCard.scss'
+import type { Movie } from "../../../../domain/entities/Movie";
+import Card from "../../ui/Card";
+import WishlistButton from "../../ui/WishlistButton/WishlistButton";
+import "./MovieCard.scss";
 
 interface MovieCardProps {
-  movie: Movie
-  onCardClick?: (movie: Movie) => void
-  className?: string
-  size?: 'small' | 'medium' | 'large'
+  movie: Movie;
+  onCardClick?: (movie: Movie) => void;
+  className?: string;
+  size?: "small" | "medium" | "large";
 }
 
 const MovieCard = ({
   movie,
   onCardClick,
-  className = '',
-  size = 'medium'
+  className = "",
+  size = "medium",
 }: MovieCardProps) => {
   const handleClick = () => {
     if (onCardClick) {
-      onCardClick(movie)
+      onCardClick(movie);
     }
-  }
+  };
 
   const formatReleaseYear = (releaseDate: string) => {
-    return new Date(releaseDate).getFullYear()
-  }
+    return new Date(releaseDate).getFullYear();
+  };
 
   const formatRating = (rating: number) => {
-    return rating.toFixed(1)
-  }
+    return rating.toFixed(1);
+  };
 
   const getImageUrl = (posterPath: string | null) => {
-    if (!posterPath) return '/placeholder-movie.jpg'
-    return `https://image.tmdb.org/t/p/w500${posterPath}`
-  }
+    if (!posterPath) return "/placeholder-movie.jpg";
+    return `https://image.tmdb.org/t/p/w500${posterPath}`;
+  };
 
   return (
     <Card
@@ -55,6 +56,15 @@ const MovieCard = ({
             <span className="movie-card__rating-value">
               {formatRating(movie.vote_average)}
             </span>
+          </div>
+
+          <div className="movie-card__wishlist">
+            <WishlistButton
+              movie={movie}
+              variant="icon"
+              size="small"
+              showTooltip={false}
+            />
           </div>
         </div>
       </div>
@@ -82,7 +92,7 @@ const MovieCard = ({
         )}
       </div>
     </Card>
-  )
-}
+  );
+};
 
-export default MovieCard
+export default MovieCard;

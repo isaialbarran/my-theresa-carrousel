@@ -13,6 +13,7 @@ interface MovieCarouselProps {
   cardSize?: 'small' | 'medium' | 'large'
   showNavigation?: boolean
   itemsPerView?: number
+  category?: 'popular' | 'top-rated' | 'upcoming' | 'default'
 }
 
 const MovieCarousel = ({
@@ -23,7 +24,8 @@ const MovieCarousel = ({
   onMovieClick,
   cardSize = 'medium',
   showNavigation = true,
-  itemsPerView = 6
+  itemsPerView = 6,
+  category = 'default'
 }: MovieCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
@@ -106,10 +108,28 @@ const MovieCarousel = ({
     </div>
   )
 
+  const getCategoryIcon = () => {
+    switch (category) {
+      case 'popular':
+        return '🔥'
+      case 'top-rated':
+        return '⭐'
+      case 'upcoming':
+        return '🎬'
+      default:
+        return null
+    }
+  }
+
   return (
-    <section className="movie-carousel">
+    <section className={`movie-carousel movie-carousel--${category}`}>
       <div className="movie-carousel__header">
-        <h2 className="movie-carousel__title">{label}</h2>
+        <h2 className="movie-carousel__title">
+          {getCategoryIcon() && (
+            <span className="movie-carousel__icon">{getCategoryIcon()}</span>
+          )}
+          {label}
+        </h2>
 
         {showNavigation && movies.length > 0 && (
           <div className="movie-carousel__navigation">

@@ -83,6 +83,7 @@
     transition: opacity $transition-slow;
     display: flex;
     align-items: flex-end;
+    justify-content: space-between;
     padding: $spacing-4;
 
     .movie-card:hover & {
@@ -108,6 +109,29 @@
 
     &-value {
       line-height: 1;
+    }
+  }
+
+  &__wishlist {
+    position: relative;
+    z-index: 2;
+
+    .wishlist-button {
+      background-color: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      backdrop-filter: blur(4px);
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+      }
+
+      .wishlist-button__icon {
+        font-size: 16px;
+      }
     }
   }
 

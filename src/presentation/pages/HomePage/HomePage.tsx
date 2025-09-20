@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/layout/Header";
 import MovieCarousel from "../../components/features/MovieCarousel";
+import MovieDetail from "../../components/features/MovieDetail";
 import tmdbApi from "../../../infrastructure/api/tmdbApi";
 import type { Movie } from "../../../domain/entities/Movie";
 import { MovieCategory } from "../../../domain/entities/Category";
@@ -12,6 +13,8 @@ const HomePage = () => {
   const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [selectedMovieCategory, setSelectedMovieCategory] = useState<'popular' | 'top-rated' | 'upcoming' | 'default'>('default');
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -62,6 +65,18 @@ const HomePage = () => {
     fetchMovies();
   }, []);
 
+  const handleMovieClick = (movie: Movie, category: 'popular' | 'top-rated' | 'upcoming' | 'default' = 'default') => {
+    setSelectedMovie(movie);
+    setSelectedMovieCategory(category);
+    document.body.classList.add('modal-open');
+  };
+
+  const handleCloseDetail = () => {
+    setSelectedMovie(null);
+    setSelectedMovieCategory('default');
+    document.body.classList.remove('modal-open');
+  };
+
   if (loading) {
     return (
       <div className="container">
@@ -95,31 +110,41 @@ const HomePage = () => {
         movies={popularMovies}
         loading={loading}
         error={error}
-        onMovieClick={(movie) =>
-          console.log("Popular movie clicked:", movie.title)
-        }
+        onMovieClick={(movie) => handleMovieClick(movie, 'popular')}
         cardSize="medium"
+        category="popular"
       />
       <MovieCarousel
         label="Top Rated Movies"
         movies={topRatedMovies}
         loading={loading}
         error={error}
-        onMovieClick={(movie) =>
-          console.log("Top rated movie clicked:", movie.title)
-        }
+        onMovieClick={(movie) => handleMovieClick(movie, 'top-rated')}
         cardSize="medium"
+        category="top-rated"
       />
       <MovieCarousel
         label="Upcoming Movies"
         movies={upcomingMovies}
         loading={loading}
         error={error}
-        onMovieClick={(movie) =>
-          console.log("Upcoming movie clicked:", movie.title)
-        }
+        onMovieClick={(movie) => handleMovieClick(movie, 'upcoming')}
         cardSize="medium"
+        category="upcoming"
       />
+
+      {selectedMovie && (
+        <div className="movie-detail-modal">
+          <div className="movie-detail-modal__backdrop" onClick={handleCloseDetail} />
+          <div className="movie-detail-modal__content">
+            <MovieDetail
+              movie={selectedMovie}
+              onClose={handleCloseDetail}
+              category={selectedMovieCategory}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

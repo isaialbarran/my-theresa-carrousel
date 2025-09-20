@@ -1,0 +1,133 @@
+@import '../../../../styles/themes/mixins';
+
+.wishlist-button {
+  position: relative;
+  transition: all $transition-fast;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &--icon {
+    min-width: auto;
+
+    .wishlist-button__icon {
+      font-size: $font-size-lg;
+      transition: transform $transition-fast;
+    }
+
+    &:hover .wishlist-button__icon {
+      transform: scale(1.1);
+    }
+
+    &:active .wishlist-button__icon {
+      transform: scale(0.95);
+    }
+  }
+
+  &--full {
+    min-width: 160px;
+    gap: $spacing-2;
+
+    .wishlist-button__icon {
+      font-size: $font-size-base;
+      transition: transform $transition-fast;
+    }
+
+    .wishlist-button__text {
+      @include text-body-sm;
+      font-weight: $font-weight-medium;
+    }
+
+    &:hover .wishlist-button__icon {
+      transform: scale(1.1);
+    }
+  }
+
+  // Size variants
+  &.button--small {
+    .wishlist-button__icon {
+      font-size: $font-size-sm;
+    }
+
+    &.wishlist-button--full .wishlist-button__text {
+      @include text-caption;
+    }
+  }
+
+  &.button--large {
+    .wishlist-button__icon {
+      font-size: $font-size-xl;
+    }
+
+    &.wishlist-button--full .wishlist-button__text {
+      @include text-body;
+    }
+  }
+
+  // Accessibility improvements
+  &:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  // Animation for wishlist state change
+  &__icon {
+    display: inline-block;
+    animation: wishlist-heart-beat 0.3s ease-in-out;
+  }
+}
+
+// Animation for when item is added/removed from wishlist
+@keyframes wishlist-heart-beat {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Tooltip styles (when using title attribute)
+.wishlist-button[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: calc(100% + $spacing-2);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: $spacing-1 $spacing-2;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-xs;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  animation: tooltip-fade-in 0.2s ease-in-out forwards;
+}
+
+@keyframes tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+// Responsive adjustments
+@include media-max-sm {
+  .wishlist-button--full {
+    min-width: 140px;
+
+    .wishlist-button__text {
+      @include text-caption;
+    }
+  }
+}
