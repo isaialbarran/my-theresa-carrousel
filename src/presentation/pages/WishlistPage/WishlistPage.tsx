@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ReactNode } from "react";
-import Header from "../../components/layout/Header";
+import PageLayout from "../../components/layout/PageLayout/PageLayout";
 import MovieCard from "../../components/features/MovieCard";
 import MovieDetail from "../../components/features/MovieDetail";
 import Button from "../../components/ui/Button";
@@ -21,6 +21,7 @@ const WishlistPage = () => {
     "added",
   );
   const [searchQuery, setSearchQuery] = useState("");
+
 
   // Debounce search query to avoid excessive filtering
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
@@ -140,9 +141,7 @@ const WishlistPage = () => {
   );
 
   return (
-    <div className="container">
-      <Header />
-
+    <PageLayout>
       <div className="wishlist-page">
         <div className="wishlist-page__header">
           <div className="wishlist-page__title">
@@ -271,7 +270,7 @@ const WishlistPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

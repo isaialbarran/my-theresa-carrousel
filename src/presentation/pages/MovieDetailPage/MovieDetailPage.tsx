@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import Card from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
-import Header from "../../components/layout/Header";
+import PageLayout from "../../components/layout/PageLayout/PageLayout";
 import { useMovieDetails } from "../../../application/hooks/useMovieDetails";
 import { useWishlistActions, useIsInWishlist } from "../../../application/store/appStore";
 import "./MovieDetailPage.scss";
@@ -32,23 +32,22 @@ const MovieDetailPage = () => {
     navigate(-1);
   };
 
+
   if (loading) {
     return (
-      <div className="container">
-        <Header />
+      <PageLayout>
         <main className="main-content">
           <Card className="loading-card">
             <div className="loading-spinner">Loading movie details...</div>
           </Card>
         </main>
-      </div>
+      </PageLayout>
     );
   }
 
   if (error || !movie) {
     return (
-      <div className="container">
-        <Header />
+      <PageLayout>
         <main className="main-content">
           <Card className="error-card">
             <h1>Movie Not Found</h1>
@@ -56,13 +55,12 @@ const MovieDetailPage = () => {
             <Button onClick={handleGoBack}>Go Back</Button>
           </Card>
         </main>
-      </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className="container">
-      <Header />
+    <PageLayout>
 
       <main className="main-content">
         <Card className="image-area">
@@ -108,7 +106,7 @@ const MovieDetailPage = () => {
           )}
         </div>
       </Card>
-    </div>
+    </PageLayout>
   );
 };
 
