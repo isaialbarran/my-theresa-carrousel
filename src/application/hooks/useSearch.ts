@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react';
-import type { Movie } from '../../domain/entities/Movie';
-import type { MovieResponse } from '../../domain/repositories/MovieRepository';
-import { movieService } from '../services/movieService';
+import { useState, useCallback } from "react";
+import type { Movie } from "../../domain/entities/Movie";
+import type { MovieResponse } from "../../domain/repositories/MovieRepository";
+import { movieService } from "../services/movieService";
 
 interface UseSearchState {
   results: Movie[];
@@ -20,7 +20,7 @@ interface UseSearchActions {
 }
 
 export const useSearch = () => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [state, setState] = useState<UseSearchState>({
     results: [],
     loading: false,
@@ -33,7 +33,7 @@ export const useSearch = () => {
 
   const searchMovies = async (searchQuery: string, page = 1, append = false) => {
     if (!searchQuery.trim()) {
-      setState(prev => ({ ...prev, error: 'Search query cannot be empty' }));
+      setState(prev => ({ ...prev, error: "Search query cannot be empty" }));
       return;
     }
 
@@ -55,7 +55,7 @@ export const useSearch = () => {
       setState(prev => ({
         ...prev,
         loading: false,
-        error: error instanceof Error ? error.message : 'Search failed',
+        error: error instanceof Error ? error.message : "Search failed",
       }));
     }
   };
@@ -71,7 +71,7 @@ export const useSearch = () => {
   }, [query, state.loading, state.hasMore, state.currentPage]);
 
   const clear = useCallback(() => {
-    setQuery('');
+    setQuery("");
     setState({
       results: [],
       loading: false,

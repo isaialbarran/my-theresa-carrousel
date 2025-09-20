@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import type { Movie } from '../../domain/entities/Movie';
-import { MovieCategory } from '../../domain/entities/Category';
-import type { MovieResponse } from '../../domain/repositories/MovieRepository';
-import { movieService } from '../services/movieService';
+import { useState, useEffect } from "react";
+import type { Movie } from "../../domain/entities/Movie";
+import { MovieCategory } from "../../domain/entities/Category";
+import type { MovieResponse } from "../../domain/repositories/MovieRepository";
+import { movieService } from "../services/movieService";
 
 interface UseMoviesState {
   movies: Movie[];
@@ -48,7 +48,7 @@ export const useMovies = (category: MovieCategory, initialPage = 1) => {
       setState(prev => ({
         ...prev,
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load movies',
+        error: error instanceof Error ? error.message : "Failed to load movies",
       }));
     }
   };

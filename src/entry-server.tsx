@@ -1,31 +1,84 @@
 import { StrictMode } from "react";
-import { renderToString } from "react-dom/server";
+import { renderToPipeableStream } from "react-dom/server";
+import { StaticRouter } from "react-router-dom";
 import App from "./App.tsx";
-import { resolveRoute } from "./application/store/appStore";
+
+interface RenderOptions {
+  onShellReady?: () => void;
+  onShellError?: (error: Error) => void;
+  onAllReady?: () => void;
+  onError?: (error: Error) => void;
+}
 
 interface RenderResult {
-  appHtml: string;
-  initialRoute: ReturnType<typeof resolveRoute>;
+  stream: { pipe: (writable: NodeJS.WritableStream, options?: { end?: boolean }) => NodeJS.WritableStream; route: string };
+  initialRoute: string;
   status: number;
 }
 
 const KNOWN_ROUTES = new Set(["/", "/wishlist"]);
+const MOVIE_ROUTE_PATTERN = /^\/movie\/\d+$/;
 
-export async function render(url: string): Promise<RenderResult> {
+function getRouteStatus(path: string): number {
+  if (KNOWN_ROUTES.has(path) || MOVIE_ROUTE_PATTERN.test(path)) {
+    return 200;
+  }
+  return 404;
+}
+
+export function render(url: string, options: RenderOptions = {}): RenderResult {
   const path = url.split("?")[0] ?? "/";
-  const route = resolveRoute(path);
+  const status = getRouteStatus(path);
 
-  const appHtml = renderToString(
+  const { pipe } = renderToPipeableStream(
     <StrictMode>
-      <App initialRoute={route} />
-    </StrictMode>
+      <StaticRouter location={url}>
+        <App initialRoute={path} />
+      </StaticRouter>
+    </StrictMode>,
+    {
+      bootstrapScripts: ["/src/main.tsx"],
+      onShellReady() {
+        options.onShellReady?.();
+      },
+      onShellError(error: unknown) {
+        options.onShellError?.(error as Error);
+      },
+      onAllReady() {
+        options.onAllReady?.();
+      },
+      onError(error: unknown) {
+        options.onError?.(error as Error);
+      },
+    },
   );
 
-  const status = KNOWN_ROUTES.has(path) ? 200 : 404;
+  return {
+    stream: { pipe, route: path },
+    initialRoute: path,
+    status,
+  };
+}
+
+// Legacy function for backwards compatibility - falls back to sync rendering
+export async function renderToString(url: string) {
+  const path = url.split("?")[0] ?? "/";
+  const status = getRouteStatus(path);
+
+  // For backwards compatibility, use the old sync approach
+  const { renderToString: syncRenderToString } = await import("react-dom/server");
+
+  const appHtml = syncRenderToString(
+    <StrictMode>
+      <StaticRouter location={url}>
+        <App initialRoute={path} />
+      </StaticRouter>
+    </StrictMode>,
+  );
 
   return {
     appHtml,
-    initialRoute: route,
+    initialRoute: path,
     status,
   };
 }

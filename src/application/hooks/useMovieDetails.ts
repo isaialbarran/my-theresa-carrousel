@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import type { MovieDetails } from '../../domain/entities/Movie';
-import { movieService } from '../services/movieService';
+import { useState, useEffect } from "react";
+import type { MovieDetails } from "../../domain/entities/Movie";
+import { movieService } from "../services/movieService";
 
 interface UseMovieDetailsState {
   movie: MovieDetails | null;
@@ -31,7 +31,7 @@ export const useMovieDetails = (movieId?: number) => {
       setState(prev => ({
         ...prev,
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load movie details',
+        error: error instanceof Error ? error.message : "Failed to load movie details",
       }));
     }
   };

@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import type { Movie } from '../../domain/entities/Movie';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import type { Movie } from "../../domain/entities/Movie";
 
 export interface WishlistItem {
   id: number;
@@ -83,7 +83,7 @@ export const useWishlistStore = create<WishlistStore>()(
           items: [],
           error: null,
         });
-        console.log('Wishlist cleared');
+        console.log("Wishlist cleared");
       },
 
       isInWishlist: (movieId: number) => {
@@ -115,12 +115,12 @@ export const useWishlistStore = create<WishlistStore>()(
       },
     }),
     {
-      name: 'theresa-wishlist-storage',
+      name: "theresa-wishlist-storage",
       partialize: (state) => ({
         items: state.items,
       }),
-    }
-  )
+    },
+  ),
 );
 
 // Selectors for better performance

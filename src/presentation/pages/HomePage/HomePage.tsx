@@ -14,7 +14,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [selectedMovieCategory, setSelectedMovieCategory] = useState<'popular' | 'top-rated' | 'upcoming' | 'default'>('default');
+  const [selectedMovieCategory, setSelectedMovieCategory] = useState<"popular" | "top-rated" | "upcoming" | "default">("default");
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -42,12 +42,12 @@ const HomePage = () => {
         // Test individual movie details
         if (popular.results.length > 0) {
           const movieDetails = await tmdbApi.getMovieDetails(
-            popular.results[0].id
+            popular.results[0].id,
           );
           console.log(
             "✅ Movie details for:",
             popular.results[0].title,
-            movieDetails
+            movieDetails,
           );
         }
 
@@ -65,16 +65,16 @@ const HomePage = () => {
     fetchMovies();
   }, []);
 
-  const handleMovieClick = (movie: Movie, category: 'popular' | 'top-rated' | 'upcoming' | 'default' = 'default') => {
+  const handleMovieClick = (movie: Movie, category: "popular" | "top-rated" | "upcoming" | "default" = "default") => {
     setSelectedMovie(movie);
     setSelectedMovieCategory(category);
-    document.body.classList.add('modal-open');
+    document.body.classList.add("modal-open");
   };
 
   const handleCloseDetail = () => {
     setSelectedMovie(null);
-    setSelectedMovieCategory('default');
-    document.body.classList.remove('modal-open');
+    setSelectedMovieCategory("default");
+    document.body.classList.remove("modal-open");
   };
 
   if (loading) {
@@ -110,7 +110,7 @@ const HomePage = () => {
         movies={popularMovies}
         loading={loading}
         error={error}
-        onMovieClick={(movie) => handleMovieClick(movie, 'popular')}
+        onMovieClick={(movie) => handleMovieClick(movie, "popular")}
         cardSize="medium"
         category="popular"
       />
@@ -119,7 +119,7 @@ const HomePage = () => {
         movies={topRatedMovies}
         loading={loading}
         error={error}
-        onMovieClick={(movie) => handleMovieClick(movie, 'top-rated')}
+        onMovieClick={(movie) => handleMovieClick(movie, "top-rated")}
         cardSize="medium"
         category="top-rated"
       />
@@ -128,7 +128,7 @@ const HomePage = () => {
         movies={upcomingMovies}
         loading={loading}
         error={error}
-        onMovieClick={(movie) => handleMovieClick(movie, 'upcoming')}
+        onMovieClick={(movie) => handleMovieClick(movie, "upcoming")}
         cardSize="medium"
         category="upcoming"
       />

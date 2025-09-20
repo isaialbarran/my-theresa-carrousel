@@ -1,48 +1,48 @@
-import { useTheme, useThemeActions } from '../../../../application/store/appStore'
-import Button from '../Button'
-import './ThemeSwitcher.scss'
+import { useTheme, useThemeActions } from "../../../../application/store/appStore";
+import Button from "../Button";
+import "./ThemeSwitcher.scss";
 
 interface ThemeSwitcherProps {
-  variant?: 'icon' | 'dropdown'
-  size?: 'small' | 'medium' | 'large'
+  variant?: "icon" | "dropdown"
+  size?: "small" | "medium" | "large"
   className?: string
 }
 
 const ThemeSwitcher = ({
-  variant = 'icon',
-  size = 'medium',
-  className = ''
+  variant = "icon",
+  size = "medium",
+  className = "",
 }: ThemeSwitcherProps) => {
-  const { mode: theme, actual: actualTheme } = useTheme()
-  const { setTheme, toggleTheme } = useThemeActions()
+  const { mode: theme, actual: actualTheme } = useTheme();
+  const { setTheme, toggleTheme } = useThemeActions();
 
   const getThemeIcon = () => {
     switch (theme) {
-      case 'light':
-        return '☀️'
-      case 'dark':
-        return '🌙'
-      case 'auto':
-        return actualTheme === 'dark' ? '🌙' : '☀️'
+      case "light":
+        return "☀️";
+      case "dark":
+        return "🌙";
+      case "auto":
+        return actualTheme === "dark" ? "🌙" : "☀️";
       default:
-        return '🌙'
+        return "🌙";
     }
-  }
+  };
 
   const getThemeLabel = () => {
     switch (theme) {
-      case 'light':
-        return 'Light'
-      case 'dark':
-        return 'Dark'
-      case 'auto':
-        return `Auto (${actualTheme})`
+      case "light":
+        return "Light";
+      case "dark":
+        return "Dark";
+      case "auto":
+        return `Auto (${actualTheme})`;
       default:
-        return 'Theme'
+        return "Theme";
     }
-  }
+  };
 
-  if (variant === 'icon') {
+  if (variant === "icon") {
     return (
       <Button
         variant="ghost"
@@ -56,7 +56,7 @@ const ThemeSwitcher = ({
           {getThemeIcon()}
         </span>
       </Button>
-    )
+    );
   }
 
   return (
@@ -64,32 +64,32 @@ const ThemeSwitcher = ({
       <div className="theme-switcher__label">Theme</div>
       <div className="theme-switcher__options">
         <Button
-          variant={theme === 'light' ? 'primary' : 'ghost'}
+          variant={theme === "light" ? "primary" : "ghost"}
           size="small"
-          onClick={() => setTheme('light')}
+          onClick={() => setTheme("light")}
           className="theme-switcher__option"
         >
           ☀️ Light
         </Button>
         <Button
-          variant={theme === 'dark' ? 'primary' : 'ghost'}
+          variant={theme === "dark" ? "primary" : "ghost"}
           size="small"
-          onClick={() => setTheme('dark')}
+          onClick={() => setTheme("dark")}
           className="theme-switcher__option"
         >
           🌙 Dark
         </Button>
         <Button
-          variant={theme === 'auto' ? 'primary' : 'ghost'}
+          variant={theme === "auto" ? "primary" : "ghost"}
           size="small"
-          onClick={() => setTheme('auto')}
+          onClick={() => setTheme("auto")}
           className="theme-switcher__option"
         >
           🔄 Auto
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ThemeSwitcher
+export default ThemeSwitcher;

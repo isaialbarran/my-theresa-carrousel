@@ -38,7 +38,7 @@ const VirtualGrid = memo(
 
       const containerWidth = containerRef.current.clientWidth;
       const columnsPerRow = Math.floor(
-        (containerWidth + gap) / (itemWidth + gap)
+        (containerWidth + gap) / (itemWidth + gap),
       );
       const totalRows = Math.ceil(items.length / columnsPerRow);
       const rowHeight = itemHeight + gap;
@@ -84,7 +84,7 @@ const VirtualGrid = memo(
           height: itemHeight,
         };
       },
-      [startIndex, columnsPerRow, itemHeight, itemWidth, gap]
+      [startIndex, columnsPerRow, itemHeight, itemWidth, gap],
     );
 
     if (items.length === 0) {
@@ -117,7 +117,7 @@ const VirtualGrid = memo(
         </div>
       </div>
     );
-  }
+  },
 );
 
 VirtualGrid.displayName = "VirtualGrid";

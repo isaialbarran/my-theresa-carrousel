@@ -4,11 +4,40 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>My Theresa Carrousel</title>
+    <!-- Preload critical resources -->
+    <link rel="modulepreload" href="/src/main.tsx" />
+    <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="//image.tmdb.org" />
+    <!-- Initial loading indicator styles -->
+    <style>
+      #loading-indicator {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+        font-family: system-ui, -apple-system, sans-serif;
+        color: #666;
+      }
+      .loading #loading-indicator {
+        display: block;
+      }
+    </style>
   </head>
   <body>
+    <!-- Loading indicator for slow connections -->
+    <div id="loading-indicator">Loading movies...</div>
     <div id="root"><!--app-html--></div>
     <!--initial-route-->
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Remove loading indicator when hydration starts -->
+    <script>
+      document.body.classList.add('loading');
+      // Remove loading class when React starts hydrating
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => document.body.classList.remove('loading'), 100);
+      });
+    </script>
   </body>
 </html>

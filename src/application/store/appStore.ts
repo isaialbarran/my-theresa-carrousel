@@ -4,7 +4,6 @@ import type { Movie } from "../../domain/entities/Movie";
 
 export type ThemeMode = "light" | "dark" | "auto";
 export type ActualTheme = "light" | "dark";
-export type Route = "/" | "/wishlist";
 
 interface AppState {
   // Theme state
@@ -15,9 +14,6 @@ interface AppState {
 
   // Wishlist state
   wishlist: Movie[];
-
-  // Router state
-  currentRoute: Route;
 }
 
 interface AppActions {
@@ -31,9 +27,6 @@ interface AppActions {
   removeFromWishlist: (movieId: number) => void;
   toggleWishlist: (movie: Movie) => void;
   clearWishlist: () => void;
-
-  // Router actions
-  navigate: (route: Route) => void;
 }
 
 type AppStore = AppState & AppActions;
@@ -60,12 +53,12 @@ export const useAppStore = create<AppStore>()(
       // Create stable action functions
       const setTheme = (mode: ThemeMode) =>
         set((state) => ({
-          theme: { ...state.theme, mode }
+          theme: { ...state.theme, mode },
         }));
 
       const setActualTheme = (actual: ActualTheme) =>
         set((state) => ({
-          theme: { ...state.theme, actual }
+          theme: { ...state.theme, actual },
         }));
 
       const toggleTheme = () =>
@@ -75,8 +68,8 @@ export const useAppStore = create<AppStore>()(
             mode: state.theme.mode === "light"
               ? "dark"
               : state.theme.mode === "dark"
-              ? "auto"
-              : "light",
+                ? "auto"
+                : "light",
           },
         }));
 
@@ -104,13 +97,6 @@ export const useAppStore = create<AppStore>()(
         }
       };
 
-      const navigate = (route: Route) => {
-        set({ currentRoute: route });
-        if (typeof window !== "undefined") {
-          window.history.pushState(null, "", route);
-        }
-      };
-
       return {
         // Initial state
         theme: {
@@ -118,7 +104,6 @@ export const useAppStore = create<AppStore>()(
           actual: "light",
         },
         wishlist: [],
-        currentRoute: "/",
 
         // Actions
         setTheme,
@@ -128,7 +113,6 @@ export const useAppStore = create<AppStore>()(
         removeFromWishlist,
         toggleWishlist,
         clearWishlist,
-        navigate,
       };
     },
     {
@@ -138,8 +122,8 @@ export const useAppStore = create<AppStore>()(
         theme: { mode: state.theme.mode },
         wishlist: state.wishlist,
       }),
-    }
-  )
+    },
+  ),
 );
 
 // Convenience selectors
@@ -160,22 +144,7 @@ export const useWishlistActions = () => {
   return { addToWishlist, removeFromWishlist, toggleWishlist, clearWishlist };
 };
 
-export const useRouter = () => {
-  const currentRoute = useAppStore((state) => state.currentRoute);
-  const navigate = useAppStore((state) => state.navigate);
-  return { currentRoute, navigate };
-};
-
 // Specific selectors for performance
 export const useWishlistCount = () => useAppStore((state) => state.wishlist.length);
 export const useIsInWishlist = (movieId: number) =>
   useAppStore((state) => state.wishlist.some(item => item.id === movieId));
-
-// Route resolver utility
-export const resolveRoute = (path: string): Route => {
-  const normalized = path.split("?")[0] ?? "/";
-  if (normalized.startsWith("/wishlist")) {
-    return "/wishlist";
-  }
-  return "/";
-};

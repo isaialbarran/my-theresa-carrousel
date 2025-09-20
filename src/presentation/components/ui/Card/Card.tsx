@@ -1,9 +1,9 @@
-import './Card.scss'
+import "./Card.scss";
 
 interface CardProps {
   children: React.ReactNode
-  variant?: 'default' | 'elevated' | 'outlined' | 'flat'
-  padding?: 'none' | 'small' | 'medium' | 'large'
+  variant?: "default" | "elevated" | "outlined" | "flat"
+  padding?: "none" | "small" | "medium" | "large"
   className?: string
   style?: React.CSSProperties
   onClick?: () => void
@@ -12,28 +12,28 @@ interface CardProps {
 
 const Card = ({
   children,
-  variant = 'default',
-  padding = 'medium',
-  className = '',
+  variant = "default",
+  padding = "medium",
+  className = "",
   style,
   onClick,
-  hoverable = false
+  hoverable = false,
 }: CardProps) => {
-  const isClickable = onClick || hoverable
+  const isClickable = onClick || hoverable;
 
   return (
     <section
       className={`card card--${variant} card--padding-${padding} ${
-        isClickable ? 'card--clickable' : ''
+        isClickable ? "card--clickable" : ""
       } ${className}`}
       style={style}
       onClick={onClick}
-      role={onClick ? 'button' : undefined}
+      role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
       {children}
     </section>
-  )
-}
+  );
+};
 
-export default Card
+export default Card;

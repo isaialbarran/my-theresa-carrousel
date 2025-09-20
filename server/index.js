@@ -98,12 +98,50 @@ async function createServer() {
         const rawTemplate = await readFile(resolve(rootDir, 'index.html'), 'utf-8')
         const template = await vite.transformIndexHtml(url, rawTemplate)
         const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
-        const { appHtml, initialRoute, status } = await render(url)
-        const html = replaceInitialRoute(injectAppHtml(template, appHtml), initialRoute)
 
-        res.statusCode = status
-        res.setHeader('Content-Type', 'text/html')
-        res.end(html)
+        let didError = false
+
+        const { stream, status } = render(url, {
+          onShellReady() {
+            // Set headers and start streaming when shell is ready
+            res.statusCode = status
+            res.setHeader('Content-Type', 'text/html')
+            res.setHeader('Transfer-Encoding', 'chunked')
+
+            // Inject the initial route script into the template
+            const modifiedTemplate = template.replace(
+              '<!--initial-route-->',
+              `<script>window.__INITIAL_ROUTE__ = ${JSON.stringify(stream.route)};</script>`
+            )
+
+            // Split template and stream the app content
+            const [templateHead, templateTail] = modifiedTemplate.split('<!--app-html-->')
+
+            res.write(templateHead)
+            stream.pipe(res, { end: false })
+
+            // Write the tail after streaming completes
+            res.write(templateTail)
+            res.end()
+          },
+          onShellError(error) {
+            didError = true
+            res.statusCode = 500
+            res.setHeader('Content-Type', 'text/html')
+            res.write('<h1>SSR Shell Error</h1>')
+            console.error('SSR Shell Error:', error)
+            res.end()
+          },
+          onError(error) {
+            console.error('SSR Streaming Error:', error)
+            if (!didError) {
+              res.statusCode = 500
+              res.setHeader('Content-Type', 'text/html')
+              res.write('<h1>SSR Error</h1>')
+              res.end()
+            }
+          }
+        })
       } catch (error) {
         vite.ssrFixStacktrace(error)
         console.error('SSR Error:', error)
@@ -134,12 +172,50 @@ async function createServer() {
 
     try {
       const url = getRequestPath(req)
-      const { appHtml, initialRoute, status } = await render(url)
-      const html = replaceInitialRoute(injectAppHtml(template, appHtml), initialRoute)
 
-      res.statusCode = status
-      res.setHeader('Content-Type', 'text/html')
-      res.end(html)
+      let didError = false
+
+      const { stream, status } = render(url, {
+        onShellReady() {
+          // Set headers and start streaming when shell is ready
+          res.statusCode = status
+          res.setHeader('Content-Type', 'text/html')
+          res.setHeader('Transfer-Encoding', 'chunked')
+
+          // Inject the initial route script into the template
+          const modifiedTemplate = template.replace(
+            '<!--initial-route-->',
+            `<script>window.__INITIAL_ROUTE__ = ${JSON.stringify(stream.route)};</script>`
+          )
+
+          // Split template and stream the app content
+          const [templateHead, templateTail] = modifiedTemplate.split('<!--app-html-->')
+
+          res.write(templateHead)
+          stream.pipe(res, { end: false })
+
+          // Write the tail after streaming completes
+          res.write(templateTail)
+          res.end()
+        },
+        onShellError(error) {
+          didError = true
+          res.statusCode = 500
+          res.setHeader('Content-Type', 'text/html')
+          res.write('<h1>SSR Shell Error</h1>')
+          console.error('SSR Shell Error:', error)
+          res.end()
+        },
+        onError(error) {
+          console.error('SSR Streaming Error:', error)
+          if (!didError) {
+            res.statusCode = 500
+            res.setHeader('Content-Type', 'text/html')
+            res.write('<h1>SSR Error</h1>')
+            res.end()
+          }
+        }
+      })
     } catch (error) {
       console.error('SSR render error:', error)
       res.statusCode = 500

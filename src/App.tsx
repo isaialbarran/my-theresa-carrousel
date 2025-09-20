@@ -1,45 +1,41 @@
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import HomePage from "./presentation/pages/HomePage";
 import WishlistPage from "./presentation/pages/WishlistPage";
-import { useAppStore, resolveRoute, type Route } from "./application/store/appStore";
+import MovieDetailPage from "./presentation/pages/MovieDetailPage";
 import "./styles/globals.scss";
 import "./App.css";
 
-const AppRouter = () => {
-  const currentRoute = useAppStore(state => state.currentRoute);
-
-  switch (currentRoute) {
-    case "/wishlist":
-      return <WishlistPage />;
-    case "/":
-    default:
-      return <HomePage />;
-  }
-};
-
 interface AppProps {
-  initialRoute?: Route;
+  initialRoute?: string;
 }
 
 function App({ initialRoute }: AppProps) {
-  const hasInitialized = useRef(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const hasNavigatedRef = useRef(false);
 
   useEffect(() => {
-    if (hasInitialized.current) return;
-
-    const navigate = useAppStore.getState().navigate;
-
-    if (initialRoute && initialRoute !== "/") {
-      navigate(initialRoute);
-    } else if (typeof window !== "undefined") {
-      const currentPath = resolveRoute(window.location.pathname);
-      navigate(currentPath);
+    // Handle initial route from SSR only on first load
+    if (
+      initialRoute &&
+      initialRoute !== location.pathname &&
+      typeof window !== "undefined" &&
+      !hasNavigatedRef.current
+    ) {
+      hasNavigatedRef.current = true;
+      navigate(initialRoute, { replace: true });
     }
+  }, [initialRoute, location.pathname, navigate]);
 
-    hasInitialized.current = true;
-  }, [initialRoute]);
-
-  return <AppRouter />;
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/wishlist" element={<WishlistPage />} />
+      <Route path="/movie/:id" element={<MovieDetailPage />} />
+      <Route path="*" element={<HomePage />} />
+    </Routes>
+  );
 }
 
 export default App;

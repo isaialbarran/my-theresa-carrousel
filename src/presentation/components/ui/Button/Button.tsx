@@ -1,27 +1,27 @@
-import './Button.scss'
+import "./Button.scss";
 
 interface ButtonProps {
   children: React.ReactNode
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
-  size?: 'small' | 'medium' | 'large'
+  variant?: "primary" | "secondary" | "outline" | "ghost"
+  size?: "small" | "medium" | "large"
   disabled?: boolean
   className?: string
   onClick?: () => void
-  type?: 'button' | 'submit' | 'reset'
+  type?: "button" | "submit" | "reset"
   title?: string
-  'aria-label'?: string
+  "aria-label"?: string
 }
 
 const Button = ({
   children,
-  variant = 'primary',
-  size = 'medium',
+  variant = "primary",
+  size = "medium",
   disabled = false,
-  className = '',
+  className = "",
   onClick,
-  type = 'button',
+  type = "button",
   title,
-  'aria-label': ariaLabel
+  "aria-label": ariaLabel,
 }: ButtonProps) => {
   return (
     <button
@@ -34,7 +34,7 @@ const Button = ({
     >
       {children}
     </button>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

@@ -1,22 +1,22 @@
-import type { Category } from '../../domain/entities/Category';
-import { MovieCategory } from '../../domain/entities/Category';
+import type { Category } from "../../domain/entities/Category";
+import { MovieCategory } from "../../domain/entities/Category";
 
 /**
  * Utility functions for handling movie categories and genres
  */
 
 export const CATEGORY_LABELS: Record<MovieCategory, string> = {
-  [MovieCategory.POPULAR]: 'Popular',
-  [MovieCategory.TOP_RATED]: 'Top Rated',
-  [MovieCategory.UPCOMING]: 'Upcoming',
-  [MovieCategory.NOW_PLAYING]: 'Now Playing',
+  [MovieCategory.POPULAR]: "Popular",
+  [MovieCategory.TOP_RATED]: "Top Rated",
+  [MovieCategory.UPCOMING]: "Upcoming",
+  [MovieCategory.NOW_PLAYING]: "Now Playing",
 };
 
 export const CATEGORY_DESCRIPTIONS: Record<MovieCategory, string> = {
-  [MovieCategory.POPULAR]: 'Most popular movies trending now',
-  [MovieCategory.TOP_RATED]: 'Highest rated movies of all time',
-  [MovieCategory.UPCOMING]: 'Coming soon to theaters',
-  [MovieCategory.NOW_PLAYING]: 'Currently playing in theaters',
+  [MovieCategory.POPULAR]: "Most popular movies trending now",
+  [MovieCategory.TOP_RATED]: "Highest rated movies of all time",
+  [MovieCategory.UPCOMING]: "Coming soon to theaters",
+  [MovieCategory.NOW_PLAYING]: "Currently playing in theaters",
 };
 
 /**
@@ -30,7 +30,7 @@ export const getCategoryLabel = (category: MovieCategory): string => {
  * Get description for a movie category
  */
 export const getCategoryDescription = (category: MovieCategory): string => {
-  return CATEGORY_DESCRIPTIONS[category] || '';
+  return CATEGORY_DESCRIPTIONS[category] || "";
 };
 
 /**
@@ -79,7 +79,7 @@ export const getGenreNames = (genres: Category[], genreIds: number[]): string[] 
  */
 export const formatGenreNames = (genres: Category[], genreIds: number[]): string => {
   const names = getGenreNames(genres, genreIds);
-  return names.join(', ') || 'Unknown';
+  return names.join(", ") || "Unknown";
 };
 
 /**
@@ -125,7 +125,7 @@ export const searchGenres = (genres: Category[], query: string): Category[] => {
   if (!normalizedQuery) return genres;
 
   return genres.filter(genre =>
-    genre.name.toLowerCase().includes(normalizedQuery)
+    genre.name.toLowerCase().includes(normalizedQuery),
   );
 };
 

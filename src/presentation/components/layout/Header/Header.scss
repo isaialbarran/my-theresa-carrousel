@@ -56,13 +56,27 @@
     }
   }
 
+  &__nav-link {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   &__nav-btn {
     position: relative;
     transition: all $transition-base;
+    text-decoration: none !important;
 
     &:hover {
       background-color: var(--surface-variant);
       transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    &:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
     }
 
     @include media-max-sm {

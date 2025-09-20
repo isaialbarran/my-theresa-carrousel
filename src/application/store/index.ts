@@ -1,1 +1,1 @@
-export * from './wishlistStore'
+export * from "./wishlistStore";

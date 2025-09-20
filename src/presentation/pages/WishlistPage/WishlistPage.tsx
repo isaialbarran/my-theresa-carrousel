@@ -1,11 +1,12 @@
 import { useState, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import type { ReactNode } from "react";
 import Header from "../../components/layout/Header";
 import MovieCard from "../../components/features/MovieCard";
 import MovieDetail from "../../components/features/MovieDetail";
 import Button from "../../components/ui/Button";
 import VirtualGrid from "../../components/ui/VirtualGrid";
-import { useWishlist, useWishlistActions, useWishlistCount, useRouter } from "../../../application/store/appStore";
+import { useWishlist, useWishlistActions, useWishlistCount } from "../../../application/store/appStore";
 import { useDebounce } from "../../hooks/useDebounce";
 import type { Movie } from "../../../domain/entities/Movie";
 import "./WishlistPage.scss";
@@ -14,10 +15,10 @@ const WishlistPage = () => {
   const wishlist = useWishlist();
   const wishlistCount = useWishlistCount();
   const { clearWishlist } = useWishlistActions();
-  const { navigate } = useRouter();
+  const navigate = useNavigate();
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [sortBy, setSortBy] = useState<"added" | "title" | "rating" | "year">(
-    "added"
+    "added",
   );
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -46,7 +47,7 @@ const WishlistPage = () => {
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       setSortBy(e.target.value as typeof sortBy);
     },
-    []
+    [],
   );
 
   const handleNavigateHome = useCallback(() => {
@@ -57,7 +58,7 @@ const WishlistPage = () => {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearchQuery(e.target.value);
     },
-    []
+    [],
   );
 
   const handleClearSearch = useCallback(() => {
@@ -75,7 +76,7 @@ const WishlistPage = () => {
       movies = movies.filter(
         (movie) =>
           movie.title.toLowerCase().includes(searchTerm) ||
-          (movie.overview && movie.overview.toLowerCase().includes(searchTerm))
+          (movie.overview && movie.overview.toLowerCase().includes(searchTerm)),
       );
     }
 
@@ -115,7 +116,7 @@ const WishlistPage = () => {
         </Button>
       </div>
     ),
-    [handleNavigateHome]
+    [handleNavigateHome],
   );
 
   // Constants for virtualization
@@ -135,7 +136,7 @@ const WishlistPage = () => {
         className="movie-card--wishlist"
       />
     ),
-    [handleMovieClick]
+    [handleMovieClick],
   );
 
   return (
@@ -151,11 +152,11 @@ const WishlistPage = () => {
               {sortedAndFilteredMovies.length === 1 ? "movie" : "movies"}
               {debouncedSearchQuery &&
                 wishlistCount !== sortedAndFilteredMovies.length && (
-                  <span className="wishlist-page__count-total">
-                    {" "}
+                <span className="wishlist-page__count-total">
+                  {" "}
                     of {wishlistCount}
-                  </span>
-                )}
+                </span>
+              )}
             </span>
           </div>
 
