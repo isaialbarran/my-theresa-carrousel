@@ -1,4 +1,4 @@
-import { useTheme } from '../../../hooks/useTheme'
+import { useTheme, useThemeActions } from '../../../../application/store/appStore'
 import Button from '../Button'
 import './ThemeSwitcher.scss'
 
@@ -13,7 +13,8 @@ const ThemeSwitcher = ({
   size = 'medium',
   className = ''
 }: ThemeSwitcherProps) => {
-  const { theme, actualTheme, setTheme, toggleTheme } = useTheme()
+  const { mode: theme, actual: actualTheme } = useTheme()
+  const { setTheme, toggleTheme } = useThemeActions()
 
   const getThemeIcon = () => {
     switch (theme) {

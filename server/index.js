@@ -86,9 +86,15 @@ async function createServer() {
       appType: 'custom',
     })
 
-    vite.middlewares.use('*', async (req, res) => {
+    vite.middlewares.use(async (req, res, next) => {
       try {
         const url = getRequestPath(req)
+
+        // Skip API routes or assets
+        if (url.startsWith('/api/') || url.includes('.')) {
+          return next()
+        }
+
         const rawTemplate = await readFile(resolve(rootDir, 'index.html'), 'utf-8')
         const template = await vite.transformIndexHtml(url, rawTemplate)
         const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
@@ -100,8 +106,10 @@ async function createServer() {
         res.end(html)
       } catch (error) {
         vite.ssrFixStacktrace(error)
+        console.error('SSR Error:', error)
         res.statusCode = 500
-        res.end(error.stack)
+        res.setHeader('Content-Type', 'text/html')
+        res.end(`<h1>SSR Error</h1><pre>${error.stack}</pre>`)
       }
     })
 

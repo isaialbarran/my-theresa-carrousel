@@ -1,13 +1,12 @@
+import { useEffect, useRef } from "react";
 import HomePage from "./presentation/pages/HomePage";
 import WishlistPage from "./presentation/pages/WishlistPage";
-import { ThemeProvider } from "./presentation/hooks/useTheme";
-import { WishlistProvider } from "./presentation/hooks/useWishlist";
-import { RouterProvider, useRouter, type Route } from "./presentation/hooks/useRouter";
+import { useAppStore, resolveRoute, type Route } from "./application/store/appStore";
 import "./styles/globals.scss";
 import "./App.css";
 
 const AppRouter = () => {
-  const { currentRoute } = useRouter();
+  const currentRoute = useAppStore(state => state.currentRoute);
 
   switch (currentRoute) {
     case "/wishlist":
@@ -23,15 +22,24 @@ interface AppProps {
 }
 
 function App({ initialRoute }: AppProps) {
-  return (
-    <ThemeProvider defaultTheme="auto">
-      <WishlistProvider>
-        <RouterProvider initialRoute={initialRoute}>
-          <AppRouter />
-        </RouterProvider>
-      </WishlistProvider>
-    </ThemeProvider>
-  );
+  const hasInitialized = useRef(false);
+
+  useEffect(() => {
+    if (hasInitialized.current) return;
+
+    const navigate = useAppStore.getState().navigate;
+
+    if (initialRoute && initialRoute !== "/") {
+      navigate(initialRoute);
+    } else if (typeof window !== "undefined") {
+      const currentPath = resolveRoute(window.location.pathname);
+      navigate(currentPath);
+    }
+
+    hasInitialized.current = true;
+  }, [initialRoute]);
+
+  return <AppRouter />;
 }
 
 export default App;

@@ -1,5 +1,5 @@
 import type { Movie } from "../../../../domain/entities/Movie";
-import { useMovieWishlist } from "../../../hooks/useWishlist";
+import { useIsInWishlist, useWishlistActions } from "../../../../application/store/appStore";
 import Button from "../Button";
 import "./WishlistButton.scss";
 
@@ -18,10 +18,11 @@ const WishlistButton = ({
   className = "",
   showTooltip = true,
 }: WishlistButtonProps) => {
-  const { isWishlisted, toggle } = useMovieWishlist(movie);
+  const isWishlisted = useIsInWishlist(movie.id);
+  const { toggleWishlist } = useWishlistActions();
 
   const handleClick = () => {
-    toggle();
+    toggleWishlist(movie);
   };
 
   const getIcon = () => {

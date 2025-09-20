@@ -11,25 +11,52 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
+const isBrowser = typeof window !== 'undefined'
+
+const readStoredTheme = (): ThemeMode | null => {
+  if (!isBrowser) {
+    return null
+  }
+
+  try {
+    const savedTheme = window.localStorage.getItem('theme') as ThemeMode | null
+    if (savedTheme && ['light', 'dark', 'auto'].includes(savedTheme)) {
+      return savedTheme
+    }
+  } catch (error) {
+    console.error('Error reading theme from localStorage:', error)
+  }
+
+  return null
+}
+
 interface ThemeProviderProps {
   children: ReactNode
   defaultTheme?: ThemeMode
 }
 
 export const ThemeProvider = ({ children, defaultTheme = 'auto' }: ThemeProviderProps) => {
-  const [theme, setThemeState] = useState<ThemeMode>(defaultTheme)
+  const [theme, setThemeState] = useState<ThemeMode>(() => readStoredTheme() ?? defaultTheme)
   const [actualTheme, setActualTheme] = useState<'light' | 'dark'>('light')
 
   // Get theme from localStorage or use default
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as ThemeMode
-    if (savedTheme && ['light', 'dark', 'auto'].includes(savedTheme)) {
-      setThemeState(savedTheme)
+    if (!isBrowser) {
+      return
+    }
+
+    const storedTheme = readStoredTheme()
+    if (storedTheme) {
+      setThemeState(storedTheme)
     }
   }, [])
 
   // Calculate actual theme based on theme mode and system preference
   useEffect(() => {
+    if (!isBrowser) {
+      return
+    }
+
     const calculateActualTheme = () => {
       if (theme === 'auto') {
         return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
@@ -54,6 +81,10 @@ export const ThemeProvider = ({ children, defaultTheme = 'auto' }: ThemeProvider
 
   // Apply theme to document
   useEffect(() => {
+    if (typeof document === 'undefined') {
+      return
+    }
+
     const root = document.documentElement
 
     // Remove existing theme classes
@@ -72,7 +103,15 @@ export const ThemeProvider = ({ children, defaultTheme = 'auto' }: ThemeProvider
 
   const setTheme = (newTheme: ThemeMode) => {
     setThemeState(newTheme)
-    localStorage.setItem('theme', newTheme)
+    if (!isBrowser) {
+      return
+    }
+
+    try {
+      window.localStorage.setItem('theme', newTheme)
+    } catch (error) {
+      console.error('Error saving theme to localStorage:', error)
+    }
   }
 
   const toggleTheme = () => {

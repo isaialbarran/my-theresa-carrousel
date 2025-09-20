@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import { resolveRoute, type Route } from "./presentation/hooks/useRouter";
+import { resolveRoute, type Route } from "./application/store/appStore";
 
 declare global {
   interface Window {

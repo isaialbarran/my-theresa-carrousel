@@ -5,14 +5,15 @@ import MovieCard from "../../components/features/MovieCard";
 import MovieDetail from "../../components/features/MovieDetail";
 import Button from "../../components/ui/Button";
 import VirtualGrid from "../../components/ui/VirtualGrid";
-import { useWishlist } from "../../hooks/useWishlist";
-import { useRouter } from "../../hooks/useRouter";
+import { useWishlist, useWishlistActions, useWishlistCount, useRouter } from "../../../application/store/appStore";
 import { useDebounce } from "../../hooks/useDebounce";
 import type { Movie } from "../../../domain/entities/Movie";
 import "./WishlistPage.scss";
 
 const WishlistPage = () => {
-  const { wishlist, clearWishlist, wishlistCount } = useWishlist();
+  const wishlist = useWishlist();
+  const wishlistCount = useWishlistCount();
+  const { clearWishlist } = useWishlistActions();
   const { navigate } = useRouter();
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [sortBy, setSortBy] = useState<"added" | "title" | "rating" | "year">(

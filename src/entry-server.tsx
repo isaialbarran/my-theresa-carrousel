@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 import App from "./App.tsx";
-import { resolveRoute } from "./presentation/hooks/useRouter";
+import { resolveRoute } from "./application/store/appStore";
 
 interface RenderResult {
   appHtml: string;

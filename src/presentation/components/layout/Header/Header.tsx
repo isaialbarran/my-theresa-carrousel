@@ -1,10 +1,9 @@
 import Button from '../../ui/Button'
-import { useWishlist } from '../../../hooks/useWishlist'
-import { useRouter } from '../../../hooks/useRouter'
+import { useWishlistCount, useRouter } from '../../../../application/store/appStore'
 import './Header.scss'
 
 const Header = () => {
-  const { wishlistCount } = useWishlist()
+  const wishlistCount = useWishlistCount()
   const { navigate, currentRoute } = useRouter()
 
   const navigateToHome = () => {

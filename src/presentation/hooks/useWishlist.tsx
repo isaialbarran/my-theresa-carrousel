@@ -18,16 +18,38 @@ interface WishlistProviderProps {
 }
 
 const WISHLIST_STORAGE_KEY = 'moviehub-wishlist'
+const isBrowser = typeof window !== 'undefined'
+
+const readStoredWishlist = (): Movie[] => {
+  if (!isBrowser) {
+    return []
+  }
+
+  try {
+    const savedWishlist = window.localStorage.getItem(WISHLIST_STORAGE_KEY)
+    if (savedWishlist) {
+      return JSON.parse(savedWishlist) as Movie[]
+    }
+  } catch (error) {
+    console.error('Error loading wishlist from localStorage:', error)
+  }
+
+  return []
+}
 
 export const WishlistProvider = ({ children }: WishlistProviderProps) => {
-  const [wishlist, setWishlist] = useState<Movie[]>([])
+  const [wishlist, setWishlist] = useState<Movie[]>(() => readStoredWishlist())
 
   // Load wishlist from localStorage on mount
   useEffect(() => {
+    if (!isBrowser) {
+      return
+    }
+
     try {
-      const savedWishlist = localStorage.getItem(WISHLIST_STORAGE_KEY)
+      const savedWishlist = window.localStorage.getItem(WISHLIST_STORAGE_KEY)
       if (savedWishlist) {
-        const parsedWishlist = JSON.parse(savedWishlist)
+        const parsedWishlist = JSON.parse(savedWishlist) as Movie[]
         setWishlist(parsedWishlist)
       }
     } catch (error) {
@@ -37,8 +59,12 @@ export const WishlistProvider = ({ children }: WishlistProviderProps) => {
 
   // Save wishlist to localStorage whenever it changes
   useEffect(() => {
+    if (!isBrowser) {
+      return
+    }
+
     try {
-      localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(wishlist))
+      window.localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(wishlist))
     } catch (error) {
       console.error('Error saving wishlist to localStorage:', error)
     }
