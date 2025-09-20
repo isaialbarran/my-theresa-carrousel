@@ -1,5 +1,135 @@
 @use '../../../../styles/themes/mixins' as *;
 
+.header {
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: $shadow-sm;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: all $transition-base;
+
+  &__container {
+    @include container;
+    @include flex-between;
+    padding-top: $spacing-4;
+    padding-bottom: $spacing-4;
+    min-height: 64px;
+
+    @include media-max-sm {
+      padding-top: $spacing-3;
+      padding-bottom: $spacing-3;
+      min-height: 56px;
+    }
+  }
+
+  &__brand {
+    cursor: pointer;
+    transition: transform $transition-base;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  &__title {
+    @include text-h3;
+    color: var(--text-primary);
+    margin: 0;
+    font-weight: $font-weight-bold;
+
+    @include media-max-sm {
+      @include text-h4;
+    }
+  }
+
+  &__nav {
+    @include flex-center;
+    gap: $spacing-2;
+
+    @include media-max-sm {
+      gap: $spacing-1;
+    }
+  }
+
+  &__nav-btn {
+    position: relative;
+    transition: all $transition-base;
+
+    &:hover {
+      background-color: var(--surface-variant);
+      transform: translateY(-1px);
+    }
+
+    @include media-max-sm {
+      padding: $spacing-2 $spacing-3;
+      font-size: $font-size-sm;
+    }
+  }
+
+  &__wishlist-btn {
+    @include flex-center;
+    gap: $spacing-2;
+
+    @include media-max-sm {
+      gap: $spacing-1;
+    }
+  }
+
+  &__wishlist-icon {
+    font-size: 1.1em;
+    transition: transform $transition-base;
+
+    .header__wishlist-btn:hover & {
+      transform: scale(1.2);
+    }
+  }
+
+  &__wishlist-text {
+    @include media-max-xs {
+      display: none;
+    }
+  }
+
+  &__wishlist-count {
+    @include flex-center;
+    background-color: var(--error);
+    color: var(--text-on-primary);
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    min-width: 20px;
+    height: 20px;
+    border-radius: $border-radius-full;
+    padding: 0 $spacing-1;
+    line-height: 1;
+    animation: pulse-scale 0.3s ease-out;
+
+    @include media-max-sm {
+      min-width: 18px;
+      height: 18px;
+      font-size: 10px;
+    }
+  }
+}
+
+// Animation for wishlist count
+@keyframes pulse-scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Legacy header section styles for backwards compatibility
 .header-section {
   background-color: var(--surface);
   border-bottom: 1px solid var(--border);
