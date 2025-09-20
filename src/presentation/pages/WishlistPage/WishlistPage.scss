@@ -1,0 +1,403 @@
+@use '../../../styles/themes/mixins' as *;
+
+// WishlistPage specific styles
+.wishlist-page {
+  padding: $spacing-6 0;
+  min-height: 80vh;
+
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-6;
+    flex-wrap: wrap;
+    gap: $spacing-4;
+
+    @include media-max-md {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  &__title {
+    @include flex-center;
+    gap: $spacing-3;
+    flex-wrap: wrap;
+
+    h1 {
+      @include text-h2;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    @include media-max-sm {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-2;
+    }
+  }
+
+  &__count {
+    @include text-body;
+    color: var(--text-secondary);
+    background-color: var(--surface-variant);
+    padding: $spacing-1 $spacing-3;
+    border-radius: $border-radius-full;
+    font-weight: $font-weight-medium;
+    white-space: nowrap;
+  }
+
+  &__actions {
+    @include flex-center;
+    gap: $spacing-4;
+    flex-wrap: wrap;
+
+    @include media-max-md {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    @include media-max-sm {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  &__controls {
+    @include flex-center;
+    gap: $spacing-4;
+    flex-wrap: wrap;
+
+    @include media-max-sm {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  // Search styles
+  &__search {
+    @include flex-center;
+    gap: $spacing-2;
+
+    label {
+      @include text-body-sm;
+      color: var(--text-secondary);
+      font-weight: $font-weight-medium;
+      white-space: nowrap;
+    }
+
+    @include media-max-sm {
+      flex: 1;
+    }
+  }
+
+  &__search-input {
+    position: relative;
+    @include flex-center;
+  }
+
+  &__search-field {
+    @include input-base;
+    min-width: 200px;
+    padding: $spacing-2 $spacing-3;
+    font-size: $font-size-sm;
+
+    @include media-max-sm {
+      min-width: 150px;
+    }
+
+    &:focus {
+      border-color: var(--primary);
+    }
+  }
+
+  &__search-clear {
+    position: absolute;
+    right: $spacing-2;
+    background: none;
+    border: none;
+    color: var(--text-hint);
+    cursor: pointer;
+    padding: $spacing-1;
+    border-radius: $border-radius-sm;
+    transition: all $transition-base;
+
+    &:hover {
+      color: var(--text-secondary);
+      background-color: var(--surface-variant);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  &__sort {
+    @include flex-center;
+    gap: $spacing-2;
+
+    label {
+      @include text-body-sm;
+      color: var(--text-secondary);
+      font-weight: $font-weight-medium;
+      white-space: nowrap;
+    }
+
+    @include media-max-sm {
+      flex: 1;
+    }
+  }
+
+  &__select {
+    @include input-base;
+    min-width: 140px;
+    padding: $spacing-2 $spacing-3;
+    font-size: $font-size-sm;
+    cursor: pointer;
+
+    @include media-max-sm {
+      flex: 1;
+      min-width: auto;
+    }
+  }
+
+  &__clear-btn {
+    white-space: nowrap;
+
+    @include media-max-sm {
+      width: 100%;
+    }
+  }
+
+  // Grid layout for movies
+  &__grid {
+    @include grid-auto-fit(280px, $spacing-6);
+    margin-bottom: $spacing-8;
+
+    @include media-max-sm {
+      @include grid-auto-fit(250px, $spacing-4);
+    }
+
+    @include media-max-xs {
+      @include grid-auto-fit(200px, $spacing-3);
+    }
+  }
+
+  // Empty state
+  &__empty {
+    @include flex-column-center;
+    text-align: center;
+    padding: $spacing-12 $spacing-4;
+    max-width: 400px;
+    margin: 0 auto;
+
+    h2 {
+      @include text-h3;
+      color: var(--text-primary);
+      margin: $spacing-4 0 $spacing-2;
+    }
+
+    p {
+      @include text-body;
+      color: var(--text-secondary);
+      margin-bottom: $spacing-6;
+      line-height: $line-height-relaxed;
+    }
+
+    @include media-max-sm {
+      padding: $spacing-8 $spacing-2;
+    }
+  }
+
+  &__empty-icon {
+    font-size: 4rem;
+    opacity: 0.6;
+    margin-bottom: $spacing-2;
+  }
+
+  // No results state
+  &__no-results {
+    @include flex-column-center;
+    text-align: center;
+    padding: $spacing-8 $spacing-4;
+    max-width: 400px;
+    margin: 0 auto;
+
+    h3 {
+      @include text-h4;
+      color: var(--text-primary);
+      margin: $spacing-3 0 $spacing-2;
+    }
+
+    p {
+      @include text-body;
+      color: var(--text-secondary);
+      margin-bottom: $spacing-4;
+      line-height: $line-height-relaxed;
+    }
+
+    &-icon {
+      font-size: 3rem;
+      opacity: 0.6;
+      margin-bottom: $spacing-2;
+    }
+
+    @include media-max-sm {
+      padding: $spacing-6 $spacing-2;
+    }
+  }
+
+  // Virtual grid
+  &__virtual-grid {
+    border-radius: $border-radius-lg;
+    border: 1px solid var(--border-light);
+    background-color: var(--surface);
+  }
+
+  // Count total when searching
+  &__count-total {
+    color: var(--text-hint);
+    font-weight: $font-weight-regular;
+  }
+}
+
+// Modal styles (reused from HomePage)
+.movie-detail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  @include flex-center;
+  padding: $spacing-4;
+
+  &__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+  }
+
+  &__content {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    max-height: 100vh;
+    overflow-y: auto;
+    background-color: var(--background);
+    border-radius: $border-radius-xl;
+    box-shadow: $shadow-2xl;
+    animation: modal-slide-up 0.3s ease-out;
+
+    @include media-max-md {
+      max-width: 100%;
+      height: 100vh;
+      border-radius: 0;
+    }
+  }
+}
+
+@keyframes modal-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Prevent scrolling when modal is open
+body.modal-open {
+  overflow: hidden;
+}
+
+// Category-specific styling for wishlist items
+.movie-card--wishlist {
+  .movie-card__overlay {
+    background: linear-gradient(
+      135deg,
+      rgba(var(--primary-rgb), 0.1),
+      rgba(var(--secondary-rgb), 0.05)
+    );
+  }
+
+  .movie-card__wishlist-btn {
+    background-color: var(--primary);
+    color: var(--text-on-primary);
+
+    &:hover {
+      background-color: var(--primary-variant);
+      transform: scale(1.1);
+    }
+  }
+
+  &:hover {
+    .movie-card__overlay {
+      background: linear-gradient(
+        135deg,
+        rgba(var(--primary-rgb), 0.15),
+        rgba(var(--secondary-rgb), 0.1)
+      );
+    }
+  }
+}
+
+// Loading and transitions
+.wishlist-page__grid {
+  .movie-card {
+    animation: fade-in-up 0.4s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+
+    @for $i from 1 through 20 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{($i - 1) * 0.05}s;
+      }
+    }
+  }
+}
+
+@keyframes fade-in-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive improvements
+@include media-max-xs {
+  .wishlist-page {
+    &__header {
+      margin-bottom: $spacing-4;
+    }
+
+    &__title h1 {
+      @include text-h3;
+    }
+
+    &__count {
+      padding: $spacing-1 $spacing-2;
+      font-size: $font-size-xs;
+    }
+
+    &__empty {
+      &-icon {
+        font-size: 3rem;
+      }
+
+      h2 {
+        @include text-h4;
+      }
+
+      p {
+        @include text-body-sm;
+      }
+    }
+  }
+}

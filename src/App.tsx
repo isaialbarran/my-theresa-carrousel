@@ -1,17 +1,30 @@
 import HomePage from "./presentation/pages/HomePage";
-// import MovieDetailPage from "./presentation/pages/MovieDetailPage";
+import WishlistPage from "./presentation/pages/WishlistPage";
 import { ThemeProvider } from "./presentation/hooks/useTheme";
 import { WishlistProvider } from "./presentation/hooks/useWishlist";
+import { RouterProvider, useRouter } from "./presentation/hooks/useRouter";
 import "./styles/globals.scss";
 import "./App.css";
 
+const AppRouter = () => {
+  const { currentRoute } = useRouter();
+
+  switch (currentRoute) {
+    case '/wishlist':
+      return <WishlistPage />;
+    case '/':
+    default:
+      return <HomePage />;
+  }
+};
+
 function App() {
-  // For now showing both pages - will implement routing later
   return (
     <ThemeProvider defaultTheme="auto">
       <WishlistProvider>
-        <HomePage />
-        {/* <MovieDetailPage /> */}
+        <RouterProvider>
+          <AppRouter />
+        </RouterProvider>
       </WishlistProvider>
     </ThemeProvider>
   );

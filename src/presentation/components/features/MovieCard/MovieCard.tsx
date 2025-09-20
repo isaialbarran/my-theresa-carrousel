@@ -1,3 +1,4 @@
+import { memo, useCallback, useMemo } from "react";
 import type { Movie } from "../../../../domain/entities/Movie";
 import Card from "../../ui/Card";
 import WishlistButton from "../../ui/WishlistButton/WishlistButton";
@@ -10,30 +11,34 @@ interface MovieCardProps {
   size?: "small" | "medium" | "large";
 }
 
-const MovieCard = ({
+const MovieCard = memo(({
   movie,
   onCardClick,
   className = "",
   size = "medium",
 }: MovieCardProps) => {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (onCardClick) {
       onCardClick(movie);
     }
-  };
+  }, [onCardClick, movie]);
 
-  const formatReleaseYear = (releaseDate: string) => {
-    return new Date(releaseDate).getFullYear();
-  };
+  const releaseYear = useMemo(() => {
+    return new Date(movie.release_date).getFullYear();
+  }, [movie.release_date]);
 
-  const formatRating = (rating: number) => {
-    return rating.toFixed(1);
-  };
+  const formattedRating = useMemo(() => {
+    return movie.vote_average.toFixed(1);
+  }, [movie.vote_average]);
 
-  const getImageUrl = (posterPath: string | null) => {
-    if (!posterPath) return "/placeholder-movie.jpg";
-    return `https://image.tmdb.org/t/p/w500${posterPath}`;
-  };
+  const imageUrl = useMemo(() => {
+    if (!movie.poster_path) return "/placeholder-movie.jpg";
+    return `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+  }, [movie.poster_path]);
+
+  const formattedVoteCount = useMemo(() => {
+    return movie.vote_count.toLocaleString();
+  }, [movie.vote_count]);
 
   return (
     <Card
@@ -45,7 +50,7 @@ const MovieCard = ({
     >
       <div className="movie-card__image">
         <img
-          src={getImageUrl(movie.poster_path)}
+          src={imageUrl}
           alt={movie.title}
           className="movie-card__poster"
           loading="lazy"
@@ -54,7 +59,7 @@ const MovieCard = ({
           <div className="movie-card__rating">
             <span className="movie-card__rating-icon">⭐</span>
             <span className="movie-card__rating-value">
-              {formatRating(movie.vote_average)}
+              {formattedRating}
             </span>
           </div>
 
@@ -76,11 +81,11 @@ const MovieCard = ({
 
         <div className="movie-card__meta">
           <span className="movie-card__year">
-            {formatReleaseYear(movie.release_date)}
+            {releaseYear}
           </span>
           {movie.vote_count > 0 && (
             <span className="movie-card__votes">
-              {movie.vote_count.toLocaleString()} votes
+              {formattedVoteCount} votes
             </span>
           )}
         </div>
@@ -93,6 +98,8 @@ const MovieCard = ({
       </div>
     </Card>
   );
-};
+});
+
+MovieCard.displayName = 'MovieCard';
 
 export default MovieCard;

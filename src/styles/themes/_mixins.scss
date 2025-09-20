@@ -142,6 +142,12 @@
 }
 
 // Max-width breakpoints
+@mixin media-max-xs {
+  @media (max-width: #{$breakpoint-xs - 1px}) {
+    @content;
+  }
+}
+
 @mixin media-max-sm {
   @media (max-width: #{$breakpoint-sm - 1px}) {
     @content;
