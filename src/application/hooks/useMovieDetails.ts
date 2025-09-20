@@ -24,7 +24,7 @@ export const useMovieDetails = (movieId?: number): UseMovieDetailsReturn => {
   // Use useAsyncData with immediate execution only if movieId exists
   const { data: movie, loading, error, execute, reset } = useAsyncData<MovieDetails>(
     asyncFunction,
-    { immediate: !!movieId }
+    { immediate: !!movieId },
   );
 
   // Create loadMovie function for manual loading

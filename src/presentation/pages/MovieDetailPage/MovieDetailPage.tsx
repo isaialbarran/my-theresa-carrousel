@@ -1,10 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import Card from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
 import PageLayout from "../../components/layout/PageLayout/PageLayout";
 import { useMovieDetails } from "../../../application/hooks/useMovieDetails";
-import { useWishlistActions, useIsInWishlist } from "../../../application/store/appStore";
+import {
+  useWishlistActions,
+  useIsInWishlist,
+} from "../../../application/store/appStore";
 import "./MovieDetailPage.scss";
 
 const MovieDetailPage = () => {
@@ -31,7 +34,6 @@ const MovieDetailPage = () => {
   const handleGoBack = () => {
     navigate(-1);
   };
-
 
   if (loading) {
     return (
@@ -61,11 +63,14 @@ const MovieDetailPage = () => {
 
   return (
     <PageLayout>
-
       <main className="main-content">
         <Card className="image-area">
           <img
-            src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "/placeholder-movie.jpg"}
+            src={
+              movie.poster_path
+                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                : "/placeholder-movie.jpg"
+            }
             alt={movie.title}
             className="movie-poster"
           />
@@ -76,9 +81,13 @@ const MovieDetailPage = () => {
             <h1 className="movie-title">{movie.title}</h1>
             <p className="movie-description">{movie.overview}</p>
             <div className="movie-meta">
-              <span className="release-date">Released: {movie.release_date}</span>
+              <span className="release-date">
+                Released: {movie.release_date}
+              </span>
               <span className="rating">Rating: {movie.vote_average}/10</span>
-              {movie.runtime && <span className="runtime">Runtime: {movie.runtime} min</span>}
+              {movie.runtime && (
+                <span className="runtime">Runtime: {movie.runtime} min</span>
+              )}
             </div>
           </div>
           <div className="action-buttons">
@@ -98,11 +107,22 @@ const MovieDetailPage = () => {
       <Card className="additional-info">
         <h3>Additional Information</h3>
         <div className="additional-details">
-          <p><strong>Movie ID:</strong> {movie.id}</p>
-          <p><strong>Vote Count:</strong> {movie.vote_count}</p>
-          {movie.tagline && <p><strong>Tagline:</strong> {movie.tagline}</p>}
+          <p>
+            <strong>Movie ID:</strong> {movie.id}
+          </p>
+          <p>
+            <strong>Vote Count:</strong> {movie.vote_count}
+          </p>
+          {movie.tagline && (
+            <p>
+              <strong>Tagline:</strong> {movie.tagline}
+            </p>
+          )}
           {movie.genres && movie.genres.length > 0 && (
-            <p><strong>Genres:</strong> {movie.genres.map(g => g.name).join(", ")}</p>
+            <p>
+              <strong>Genres:</strong>{" "}
+              {movie.genres.map((g) => g.name).join(", ")}
+            </p>
           )}
         </div>
       </Card>

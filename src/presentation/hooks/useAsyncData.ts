@@ -19,7 +19,7 @@ interface UseAsyncDataReturn<T> {
  */
 export function useAsyncData<T>(
   asyncFunction: () => Promise<T>,
-  options: UseAsyncDataOptions = {}
+  options: UseAsyncDataOptions = {},
 ): UseAsyncDataReturn<T> {
   const { immediate = true, onSuccess, onError } = options;
 

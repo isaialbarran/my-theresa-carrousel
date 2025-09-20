@@ -20,7 +20,7 @@ interface UseAsyncQueryReturn<T, P> {
  */
 export function useAsyncQuery<T, P>(
   asyncFunction: (params: P) => Promise<T>,
-  options: UseAsyncQueryOptions = {}
+  options: UseAsyncQueryOptions = {},
 ): UseAsyncQueryReturn<T, P> {
   const { onSuccess, onError } = options;
 
@@ -87,6 +87,6 @@ export function useAsyncQuery<T, P>(
     error,
     execute,
     reset,
-    lastParams: lastParamsRef.current
+    lastParams: lastParamsRef.current,
   };
 }

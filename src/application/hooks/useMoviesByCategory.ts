@@ -26,7 +26,7 @@ export const useMoviesByCategory = (category: MovieCategory): UseMoviesByCategor
   // Use useAsyncData to handle loading state
   const { data: movies, loading, error, execute, reset } = useAsyncData<Movie[]>(
     asyncFunction,
-    { immediate: true }
+    { immediate: true },
   );
 
   return {

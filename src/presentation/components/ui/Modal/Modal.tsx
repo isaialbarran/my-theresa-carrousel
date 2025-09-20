@@ -20,7 +20,7 @@ const Modal = ({
   className = "",
   size = "medium",
   closeOnBackdropClick = true,
-  closeOnEscape = true
+  closeOnEscape = true,
 }: ModalProps) => {
   useEffect(() => {
     if (isOpen) {
