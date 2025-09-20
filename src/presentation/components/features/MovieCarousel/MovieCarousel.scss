@@ -1,4 +1,4 @@
-@import '../../../../styles/themes/mixins';
+@use '../../../../styles/themes/mixins' as *;
 
 .movie-carousel {
   margin-bottom: $spacing-8;
@@ -19,6 +19,14 @@
     @include text-h3;
     color: var(--text-primary);
     margin: 0;
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+  }
+
+  &__icon {
+    font-size: $font-size-xl;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
   }
 
   &__navigation {
@@ -308,5 +316,125 @@
   .movie-carousel__card {
     transform: scale(1.02);
     box-shadow: 0 0 0 2px var(--border-focus);
+  }
+}
+
+// Category-specific styles
+.movie-carousel {
+  // Popular movies - Fire theme
+  &--popular {
+    .movie-carousel__title {
+      background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .movie-carousel__icon {
+      animation: fire-pulse 2s ease-in-out infinite;
+    }
+
+    .movie-carousel__nav-button {
+      &:hover:not(:disabled) {
+        background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(247, 147, 30, 0.1) 100%);
+        border-color: #ff6b35;
+      }
+    }
+
+    .movie-carousel__indicator-thumb {
+      background: linear-gradient(90deg, #ff6b35 0%, #f7931e 100%);
+    }
+  }
+
+  // Top Rated movies - Star/Gold theme
+  &--top-rated {
+    .movie-carousel__title {
+      background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .movie-carousel__icon {
+      animation: star-shine 3s ease-in-out infinite;
+    }
+
+    .movie-carousel__nav-button {
+      &:hover:not(:disabled) {
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 179, 71, 0.1) 100%);
+        border-color: #ffd700;
+      }
+    }
+
+    .movie-carousel__indicator-thumb {
+      background: linear-gradient(90deg, #ffd700 0%, #ffb347 100%);
+    }
+  }
+
+  // Upcoming movies - Cinema/Purple theme
+  &--upcoming {
+    .movie-carousel__title {
+      background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .movie-carousel__icon {
+      animation: cinema-roll 4s ease-in-out infinite;
+    }
+
+    .movie-carousel__nav-button {
+      &:hover:not(:disabled) {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+        border-color: #8b5cf6;
+      }
+    }
+
+    .movie-carousel__indicator-thumb {
+      background: linear-gradient(90deg, #8b5cf6 0%, #a855f7 100%);
+    }
+  }
+}
+
+// Category-specific animations
+@keyframes fire-pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 2px 4px rgba(255, 107, 53, 0.3));
+  }
+  50% {
+    transform: scale(1.1);
+    filter: drop-shadow(0 4px 8px rgba(255, 107, 53, 0.5));
+  }
+}
+
+@keyframes star-shine {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.3));
+  }
+  25% {
+    transform: scale(1.05) rotate(-5deg);
+    filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.4));
+  }
+  75% {
+    transform: scale(1.05) rotate(5deg);
+    filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.4));
+  }
+}
+
+@keyframes cinema-roll {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.3));
+  }
+  33% {
+    transform: scale(1.02) rotateY(10deg);
+    filter: drop-shadow(0 3px 6px rgba(139, 92, 246, 0.4));
+  }
+  66% {
+    transform: scale(1.02) rotateY(-10deg);
+    filter: drop-shadow(0 3px 6px rgba(139, 92, 246, 0.4));
   }
 }

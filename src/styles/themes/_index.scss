@@ -3,8 +3,10 @@
 // =============================================================================
 
 // Import theme foundation
-@import 'variables';
-@import 'mixins';
+@use 'sass:color';
+@use 'sass:map';
+@use 'variables' as *;
+@use 'mixins' as *;
 
 // Theme Application
 // -----------------------------------------------------------------------------
@@ -14,11 +16,11 @@
   @include theme-colors($light-theme);
 
   // Add RGB variants for rgba() usage
-  --primary-rgb: #{red(map-get($light-theme, primary))}, #{green(map-get($light-theme, primary))}, #{blue(map-get($light-theme, primary))};
-  --secondary-rgb: #{red(map-get($light-theme, secondary))}, #{green(map-get($light-theme, secondary))}, #{blue(map-get($light-theme, secondary))};
-  --success-rgb: #{red(map-get($light-theme, success))}, #{green(map-get($light-theme, success))}, #{blue(map-get($light-theme, success))};
-  --warning-rgb: #{red(map-get($light-theme, warning))}, #{green(map-get($light-theme, warning))}, #{blue(map-get($light-theme, warning))};
-  --error-rgb: #{red(map-get($light-theme, error))}, #{green(map-get($light-theme, error))}, #{blue(map-get($light-theme, error))};
+  --primary-rgb: #{color.channel(map.get($light-theme, primary), "red")}, #{color.channel(map.get($light-theme, primary), "green")}, #{color.channel(map.get($light-theme, primary), "blue")};
+  --secondary-rgb: #{color.channel(map.get($light-theme, secondary), "red")}, #{color.channel(map.get($light-theme, secondary), "green")}, #{color.channel(map.get($light-theme, secondary), "blue")};
+  --success-rgb: #{color.channel(map.get($light-theme, success), "red")}, #{color.channel(map.get($light-theme, success), "green")}, #{color.channel(map.get($light-theme, success), "blue")};
+  --warning-rgb: #{color.channel(map.get($light-theme, warning), "red")}, #{color.channel(map.get($light-theme, warning), "green")}, #{color.channel(map.get($light-theme, warning), "blue")};
+  --error-rgb: #{color.channel(map.get($light-theme, error), "red")}, #{color.channel(map.get($light-theme, error), "green")}, #{color.channel(map.get($light-theme, error), "blue")};
 }
 
 // Dark theme
@@ -27,11 +29,11 @@
   @include theme-colors($dark-theme);
 
   // Add RGB variants for rgba() usage
-  --primary-rgb: #{red(map-get($dark-theme, primary))}, #{green(map-get($dark-theme, primary))}, #{blue(map-get($dark-theme, primary))};
-  --secondary-rgb: #{red(map-get($dark-theme, secondary))}, #{green(map-get($dark-theme, secondary))}, #{blue(map-get($dark-theme, secondary))};
-  --success-rgb: #{red(map-get($dark-theme, success))}, #{green(map-get($dark-theme, success))}, #{blue(map-get($dark-theme, success))};
-  --warning-rgb: #{red(map-get($dark-theme, warning))}, #{green(map-get($dark-theme, warning))}, #{blue(map-get($dark-theme, warning))};
-  --error-rgb: #{red(map-get($dark-theme, error))}, #{green(map-get($dark-theme, error))}, #{blue(map-get($dark-theme, error))};
+  --primary-rgb: #{color.channel(map.get($dark-theme, primary), "red")}, #{color.channel(map.get($dark-theme, primary), "green")}, #{color.channel(map.get($dark-theme, primary), "blue")};
+  --secondary-rgb: #{color.channel(map.get($dark-theme, secondary), "red")}, #{color.channel(map.get($dark-theme, secondary), "green")}, #{color.channel(map.get($dark-theme, secondary), "blue")};
+  --success-rgb: #{color.channel(map.get($dark-theme, success), "red")}, #{color.channel(map.get($dark-theme, success), "green")}, #{color.channel(map.get($dark-theme, success), "blue")};
+  --warning-rgb: #{color.channel(map.get($dark-theme, warning), "red")}, #{color.channel(map.get($dark-theme, warning), "green")}, #{color.channel(map.get($dark-theme, warning), "blue")};
+  --error-rgb: #{color.channel(map.get($dark-theme, error), "red")}, #{color.channel(map.get($dark-theme, error), "green")}, #{color.channel(map.get($dark-theme, error), "blue")};
 }
 
 // Auto theme (follows system preference)
@@ -40,10 +42,10 @@
     @include theme-colors($dark-theme);
 
     // Add RGB variants for rgba() usage
-    --primary-rgb: #{red(map-get($dark-theme, primary))}, #{green(map-get($dark-theme, primary))}, #{blue(map-get($dark-theme, primary))};
-    --secondary-rgb: #{red(map-get($dark-theme, secondary))}, #{green(map-get($dark-theme, secondary))}, #{blue(map-get($dark-theme, secondary))};
-    --success-rgb: #{red(map-get($dark-theme, success))}, #{green(map-get($dark-theme, success))}, #{blue(map-get($dark-theme, success))};
-    --warning-rgb: #{red(map-get($dark-theme, warning))}, #{green(map-get($dark-theme, warning))}, #{blue(map-get($dark-theme, warning))};
-    --error-rgb: #{red(map-get($dark-theme, error))}, #{green(map-get($dark-theme, error))}, #{blue(map-get($dark-theme, error))};
+    --primary-rgb: #{color.channel(map.get($dark-theme, primary), "red")}, #{color.channel(map.get($dark-theme, primary), "green")}, #{color.channel(map.get($dark-theme, primary), "blue")};
+    --secondary-rgb: #{color.channel(map.get($dark-theme, secondary), "red")}, #{color.channel(map.get($dark-theme, secondary), "green")}, #{color.channel(map.get($dark-theme, secondary), "blue")};
+    --success-rgb: #{color.channel(map.get($dark-theme, success), "red")}, #{color.channel(map.get($dark-theme, success), "green")}, #{color.channel(map.get($dark-theme, success), "blue")};
+    --warning-rgb: #{color.channel(map.get($dark-theme, warning), "red")}, #{color.channel(map.get($dark-theme, warning), "green")}, #{color.channel(map.get($dark-theme, warning), "blue")};
+    --error-rgb: #{color.channel(map.get($dark-theme, error), "red")}, #{color.channel(map.get($dark-theme, error), "green")}, #{color.channel(map.get($dark-theme, error), "blue")};
   }
 }

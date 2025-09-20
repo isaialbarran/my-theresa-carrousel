@@ -1,0 +1,630 @@
+@use '../../../../styles/themes/mixins' as *;
+
+.movie-detail {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--background);
+
+  &__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60vh;
+    overflow: hidden;
+    z-index: 1;
+
+    @include media-max-md {
+      height: 40vh;
+    }
+  }
+
+  &__backdrop-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  &__backdrop-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0.6) 50%,
+      var(--background) 100%
+    );
+  }
+
+  &__container {
+    position: relative;
+    z-index: 2;
+    @include container;
+    padding-top: 40vh;
+    padding-bottom: $spacing-8;
+
+    @include media-max-md {
+      padding-top: 30vh;
+      padding-bottom: $spacing-6;
+    }
+  }
+
+  &__close-button {
+    position: absolute;
+    top: $spacing-4;
+    right: $spacing-4;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    @include flex-center;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.9);
+      transform: scale(1.05);
+    }
+
+    @include media-max-md {
+      top: $spacing-3;
+      right: $spacing-3;
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: $spacing-8;
+    align-items: start;
+
+    @include media-max-lg {
+      grid-template-columns: 250px 1fr;
+      gap: $spacing-6;
+    }
+
+    @include media-max-md {
+      grid-template-columns: 1fr;
+      gap: $spacing-6;
+      text-align: center;
+    }
+  }
+
+  &__poster {
+    position: sticky;
+    top: $spacing-4;
+
+    @include media-max-md {
+      position: static;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    &-card {
+      overflow: hidden;
+      @include aspect-ratio(2, 3);
+      position: relative;
+    }
+
+    &-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity $transition-slow;
+
+      &.loaded {
+        opacity: 1;
+      }
+    }
+
+    &-skeleton {
+      width: 100%;
+      height: 100%;
+      @include loading-shimmer;
+    }
+
+    &-error {
+      width: 100%;
+      height: 100%;
+      @include flex-center;
+      background-color: var(--surface-variant);
+      color: var(--text-hint);
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &__info {
+    @include media-max-md {
+      text-align: left;
+    }
+  }
+
+  &__header {
+    margin-bottom: $spacing-6;
+  }
+
+  &__title {
+    @include text-h1;
+    color: var(--text-primary);
+    margin-bottom: $spacing-2;
+    line-height: $line-height-tight;
+
+    @include media-max-md {
+      @include text-h2;
+      text-align: center;
+    }
+  }
+
+  &__original-title {
+    @include text-body;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin: 0;
+
+    @include media-max-md {
+      text-align: center;
+    }
+  }
+
+  &__meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: $spacing-4;
+    margin-bottom: $spacing-6;
+    padding: $spacing-5;
+    background-color: var(--surface);
+    border-radius: $border-radius-lg;
+    border: 1px solid var(--border-light);
+
+    @include media-max-md {
+      grid-template-columns: 1fr;
+      gap: $spacing-3;
+      padding: $spacing-4;
+    }
+
+    &-item {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-1;
+    }
+
+    &-label {
+      @include text-caption;
+      color: var(--text-hint);
+      font-weight: $font-weight-medium;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    &-value {
+      @include text-body;
+      color: var(--text-primary);
+      font-weight: $font-weight-medium;
+    }
+  }
+
+  &__rating {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+
+    &-icon {
+      font-size: $font-size-lg;
+    }
+
+    &-value {
+      @include text-body;
+      color: var(--text-primary);
+      font-weight: $font-weight-semibold;
+    }
+
+    &-count {
+      @include text-body-sm;
+      color: var(--text-hint);
+    }
+  }
+
+  &__overview {
+    margin-bottom: $spacing-6;
+  }
+
+  &__section-title {
+    @include text-h4;
+    color: var(--text-primary);
+    margin-bottom: $spacing-3;
+  }
+
+  &__overview-text {
+    @include text-body-lg;
+    color: var(--text-secondary);
+    line-height: $line-height-relaxed;
+    margin: 0;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacing-4;
+    margin-bottom: $spacing-6;
+
+    @include media-max-md {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &__wishlist-button {
+    min-width: 200px;
+
+    .movie-detail__wishlist-icon {
+      margin-right: $spacing-2;
+      font-size: $font-size-lg;
+    }
+  }
+
+  &__tmdb-button {
+    min-width: 150px;
+  }
+
+  &__warning {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-2;
+    padding: $spacing-2 $spacing-3;
+    background-color: rgba(var(--warning-rgb), 0.1);
+    border: 1px solid var(--warning);
+    border-radius: $border-radius-md;
+    color: var(--warning);
+
+    @include media-max-md {
+      justify-self: center;
+    }
+
+    &-icon {
+      font-size: $font-size-lg;
+    }
+
+    &-text {
+      @include text-body-sm;
+      font-weight: $font-weight-medium;
+    }
+  }
+
+  // Loading state
+  &--loading {
+    .movie-detail__info > * {
+      @include loading-shimmer;
+      border-radius: $border-radius-base;
+      min-height: 20px;
+      margin-bottom: $spacing-2;
+    }
+  }
+
+  // Responsive adjustments
+  @include media-max-sm {
+    &__container {
+      padding-top: 25vh;
+    }
+
+    &__content {
+      gap: $spacing-4;
+    }
+
+    &__meta {
+      padding: $spacing-3;
+    }
+
+    &__actions {
+      gap: $spacing-3;
+    }
+
+    &__wishlist-button,
+    &__tmdb-button {
+      width: 100%;
+      min-width: auto;
+    }
+  }
+
+  // Print styles
+  @media print {
+    &__backdrop {
+      display: none;
+    }
+
+    &__close-button {
+      display: none;
+    }
+
+    &__container {
+      padding-top: $spacing-4;
+    }
+
+    &__actions {
+      display: none;
+    }
+  }
+}
+
+// Animation for smooth appearance
+@keyframes movie-detail-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.movie-detail__info {
+  animation: movie-detail-fade-in 0.8s ease-out;
+}
+
+.movie-detail__poster {
+  animation: movie-detail-fade-in 0.6s ease-out;
+}
+
+// Category-specific styles for MovieDetail
+.movie-detail {
+  // Popular movies - Fire/Energy theme
+  &--popular {
+    .movie-detail__backdrop-overlay {
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 107, 53, 0.1) 0%,
+        rgba(255, 107, 53, 0.2) 50%,
+        var(--background) 100%
+      );
+    }
+
+    .movie-detail__title {
+      font-family: 'Impact', 'Arial Black', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 2px 2px 4px rgba(255, 107, 53, 0.3);
+      animation: popular-title-glow 3s ease-in-out infinite;
+    }
+
+    .movie-detail__section-title {
+      font-family: 'Impact', 'Arial Black', sans-serif;
+      font-weight: 800;
+      color: #ff6b35;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .movie-detail__meta {
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(247, 147, 30, 0.1) 100%);
+      border-color: rgba(255, 107, 53, 0.3);
+      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
+    }
+
+    .movie-detail__tmdb-button {
+      background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+      color: white;
+      border: none;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+      }
+    }
+
+    .movie-detail__close-button {
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.9) 0%, rgba(247, 147, 30, 0.9) 100%);
+      backdrop-filter: blur(8px);
+    }
+  }
+
+  // Top Rated movies - Premium/Gold theme
+  &--top-rated {
+    .movie-detail__backdrop-overlay {
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 215, 0, 0.1) 0%,
+        rgba(255, 215, 0, 0.2) 50%,
+        var(--background) 100%
+      );
+    }
+
+    .movie-detail__title {
+      font-family: 'Times New Roman', 'Georgia', serif;
+      font-weight: 700;
+      font-style: italic;
+      letter-spacing: -0.01em;
+      background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.3);
+      position: relative;
+
+      &::after {
+        content: '★';
+        position: absolute;
+        top: -10px;
+        right: -30px;
+        color: #ffd700;
+        font-size: 0.6em;
+        animation: star-twinkle 2s ease-in-out infinite;
+      }
+    }
+
+    .movie-detail__section-title {
+      font-family: 'Times New Roman', 'Georgia', serif;
+      font-weight: 600;
+      font-style: italic;
+      color: #ffd700;
+      letter-spacing: -0.01em;
+    }
+
+    .movie-detail__meta {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 179, 71, 0.1) 100%);
+      border-color: rgba(255, 215, 0, 0.3);
+      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+      border-radius: $border-radius-xl;
+    }
+
+    .movie-detail__tmdb-button {
+      background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+      color: #2c2c2c;
+      border: 2px solid #ffd700;
+      font-weight: 600;
+      font-family: 'Times New Roman', serif;
+      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        border-color: #ffb347;
+      }
+    }
+
+    .movie-detail__close-button {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.9) 0%, rgba(255, 179, 71, 0.9) 100%);
+      backdrop-filter: blur(8px);
+      color: #2c2c2c;
+    }
+  }
+
+  // Upcoming movies - Futuristic/Purple theme
+  &--upcoming {
+    .movie-detail__backdrop-overlay {
+      background: linear-gradient(
+        to bottom,
+        rgba(139, 92, 246, 0.1) 0%,
+        rgba(139, 92, 246, 0.2) 50%,
+        var(--background) 100%
+      );
+    }
+
+    .movie-detail__title {
+      font-family: 'Courier New', 'Monaco', monospace;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+      animation: futuristic-glow 4s ease-in-out infinite;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -5px;
+        right: -5px;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent 30%, rgba(139, 92, 246, 0.1) 50%, transparent 70%);
+        animation: scanner-line 3s linear infinite;
+        pointer-events: none;
+      }
+    }
+
+    .movie-detail__section-title {
+      font-family: 'Courier New', 'Monaco', monospace;
+      font-weight: 500;
+      color: #8b5cf6;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .movie-detail__meta {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+      border-color: rgba(139, 92, 246, 0.3);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+      border-radius: $border-radius-base;
+      border-style: dashed;
+    }
+
+    .movie-detail__tmdb-button {
+      background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+      color: white;
+      border: 1px solid #8b5cf6;
+      font-weight: 500;
+      font-family: 'Courier New', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      position: relative;
+
+      &::before {
+        content: '> ';
+        font-weight: bold;
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
+      }
+    }
+
+    .movie-detail__close-button {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.9) 0%, rgba(168, 85, 247, 0.9) 100%);
+      backdrop-filter: blur(8px);
+      font-family: 'Courier New', monospace;
+    }
+
+    .movie-detail__poster-card {
+      border: 2px solid rgba(139, 92, 246, 0.3);
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+    }
+  }
+}
+
+// Category-specific animations
+@keyframes popular-title-glow {
+  0%, 100% {
+    text-shadow: 2px 2px 4px rgba(255, 107, 53, 0.3);
+  }
+  50% {
+    text-shadow: 2px 2px 8px rgba(255, 107, 53, 0.6), 0 0 15px rgba(255, 107, 53, 0.4);
+  }
+}
+
+@keyframes star-twinkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes futuristic-glow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(139, 92, 246, 0.8), 0 0 30px rgba(168, 85, 247, 0.4);
+  }
+}
+
+@keyframes scanner-line {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
