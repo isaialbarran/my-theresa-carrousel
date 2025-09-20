@@ -1,7 +1,16 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
 
-type Route = '/' | '/wishlist'
+export type Route = '/' | '/wishlist'
+
+export const resolveRoute = (path: string): Route => {
+  const normalized = path.split('?')[0] ?? '/'
+
+  if (normalized.startsWith('/wishlist')) {
+    return '/wishlist'
+  }
+  return '/'
+}
 
 interface RouterContextType {
   currentRoute: Route
@@ -12,24 +21,25 @@ const RouterContext = createContext<RouterContextType | undefined>(undefined)
 
 interface RouterProviderProps {
   children: ReactNode
+  initialRoute?: Route
 }
 
-export const RouterProvider = ({ children }: RouterProviderProps) => {
-  const [currentRoute, setCurrentRoute] = useState<Route>('/')
+export const RouterProvider = ({ children, initialRoute = '/' }: RouterProviderProps) => {
+  const [currentRoute, setCurrentRoute] = useState<Route>(initialRoute)
 
   useEffect(() => {
-    // Initialize route from URL
-    const path = window.location.pathname as Route
-    if (path === '/wishlist' || path === '/') {
-      setCurrentRoute(path)
+    if (typeof window === 'undefined') {
+      return
     }
+
+    // Initialize route from URL
+    const path = resolveRoute(window.location.pathname)
+    setCurrentRoute(path)
 
     // Listen to popstate events (back/forward browser navigation)
     const handlePopState = () => {
-      const path = window.location.pathname as Route
-      if (path === '/wishlist' || path === '/') {
-        setCurrentRoute(path)
-      }
+      const nextRoute = resolveRoute(window.location.pathname)
+      setCurrentRoute(nextRoute)
     }
 
     window.addEventListener('popstate', handlePopState)
@@ -39,7 +49,9 @@ export const RouterProvider = ({ children }: RouterProviderProps) => {
   const navigate = (route: Route) => {
     if (route !== currentRoute) {
       setCurrentRoute(route)
-      window.history.pushState(null, '', route)
+      if (typeof window !== 'undefined') {
+        window.history.pushState(null, '', route)
+      }
     }
   }
 

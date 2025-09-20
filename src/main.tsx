@@ -1,10 +1,28 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { hydrateRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
+import { resolveRoute, type Route } from "./presentation/hooks/useRouter";
 
-createRoot(document.getElementById("root")!).render(
+declare global {
+  interface Window {
+    __INITIAL_ROUTE__?: Route;
+  }
+}
+
+const container = document.getElementById("root");
+
+if (!container) {
+  throw new Error("Root container element not found");
+}
+
+const initialRoute = window.__INITIAL_ROUTE__ ?? resolveRoute(window.location.pathname);
+
+hydrateRoot(
+  container,
   <StrictMode>
-    <App />
+    <App initialRoute={initialRoute} />
   </StrictMode>
 );
+
+delete window.__INITIAL_ROUTE__;

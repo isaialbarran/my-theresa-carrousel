@@ -2,7 +2,7 @@ import HomePage from "./presentation/pages/HomePage";
 import WishlistPage from "./presentation/pages/WishlistPage";
 import { ThemeProvider } from "./presentation/hooks/useTheme";
 import { WishlistProvider } from "./presentation/hooks/useWishlist";
-import { RouterProvider, useRouter } from "./presentation/hooks/useRouter";
+import { RouterProvider, useRouter, type Route } from "./presentation/hooks/useRouter";
 import "./styles/globals.scss";
 import "./App.css";
 
@@ -10,19 +10,23 @@ const AppRouter = () => {
   const { currentRoute } = useRouter();
 
   switch (currentRoute) {
-    case '/wishlist':
+    case "/wishlist":
       return <WishlistPage />;
-    case '/':
+    case "/":
     default:
       return <HomePage />;
   }
 };
 
-function App() {
+interface AppProps {
+  initialRoute?: Route;
+}
+
+function App({ initialRoute }: AppProps) {
   return (
     <ThemeProvider defaultTheme="auto">
       <WishlistProvider>
-        <RouterProvider>
+        <RouterProvider initialRoute={initialRoute}>
           <AppRouter />
         </RouterProvider>
       </WishlistProvider>

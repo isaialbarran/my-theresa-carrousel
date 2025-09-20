@@ -1,19 +1,19 @@
-import { useState, useRef, useEffect } from 'react'
-import type { Movie } from '../../../../domain/entities/Movie'
-import MovieCard from '../MovieCard'
-import Button from '../../ui/Button'
-import './MovieCarousel.scss'
+import { useState, useRef, useEffect } from "react";
+import type { Movie } from "../../../../domain/entities/Movie";
+import MovieCard from "../MovieCard";
+import Button from "../../ui/Button";
+import "./MovieCarousel.scss";
 
 interface MovieCarouselProps {
-  label: string
-  movies?: Movie[]
-  loading?: boolean
-  error?: string | null
-  onMovieClick?: (movie: Movie) => void
-  cardSize?: 'small' | 'medium' | 'large'
-  showNavigation?: boolean
-  itemsPerView?: number
-  category?: 'popular' | 'top-rated' | 'upcoming' | 'default'
+  label: string;
+  movies?: Movie[];
+  loading?: boolean;
+  error?: string | null;
+  onMovieClick?: (movie: Movie) => void;
+  cardSize?: "small" | "medium" | "large";
+  showNavigation?: boolean;
+  itemsPerView?: number;
+  category?: "popular" | "top-rated" | "upcoming" | "default";
 }
 
 const MovieCarousel = ({
@@ -22,57 +22,58 @@ const MovieCarousel = ({
   loading = false,
   error = null,
   onMovieClick,
-  cardSize = 'medium',
+  cardSize = "medium",
   showNavigation = true,
   itemsPerView = 6,
-  category = 'default'
+  category = "default",
 }: MovieCarouselProps) => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(true)
-  const carouselRef = useRef<HTMLDivElement>(null)
+  const [currentIndex, _setCurrentIndex] = useState(0);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   // Update scroll button states
   const updateScrollButtons = () => {
     if (carouselRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current
-      setCanScrollLeft(scrollLeft > 0)
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1)
+      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
     }
-  }
+  };
 
   // Handle scroll
-  const handleScroll = (direction: 'left' | 'right') => {
-    if (!carouselRef.current) return
+  const handleScroll = (direction: "left" | "right") => {
+    if (!carouselRef.current) return;
 
-    const scrollAmount = carouselRef.current.clientWidth * 0.8
-    const newScrollLeft = direction === 'left'
-      ? carouselRef.current.scrollLeft - scrollAmount
-      : carouselRef.current.scrollLeft + scrollAmount
+    const scrollAmount = carouselRef.current.clientWidth * 0.8;
+    const newScrollLeft =
+      direction === "left"
+        ? carouselRef.current.scrollLeft - scrollAmount
+        : carouselRef.current.scrollLeft + scrollAmount;
 
     carouselRef.current.scrollTo({
       left: newScrollLeft,
-      behavior: 'smooth'
-    })
-  }
+      behavior: "smooth",
+    });
+  };
 
   // Update button states on scroll
   useEffect(() => {
-    const carousel = carouselRef.current
+    const carousel = carouselRef.current;
     if (carousel) {
-      carousel.addEventListener('scroll', updateScrollButtons)
-      updateScrollButtons() // Initial check
+      carousel.addEventListener("scroll", updateScrollButtons);
+      updateScrollButtons(); // Initial check
 
-      return () => carousel.removeEventListener('scroll', updateScrollButtons)
+      return () => carousel.removeEventListener("scroll", updateScrollButtons);
     }
-  }, [movies])
+  }, [movies]);
 
   // Handle movie click
   const handleMovieClick = (movie: Movie) => {
     if (onMovieClick) {
-      onMovieClick(movie)
+      onMovieClick(movie);
     }
-  }
+  };
 
   // Render loading skeleton
   const renderLoadingSkeleton = () => (
@@ -87,7 +88,7 @@ const MovieCarousel = ({
         </div>
       ))}
     </div>
-  )
+  );
 
   // Render error state
   const renderError = () => (
@@ -98,7 +99,7 @@ const MovieCarousel = ({
         Try Again
       </Button>
     </div>
-  )
+  );
 
   // Render empty state
   const renderEmpty = () => (
@@ -106,20 +107,20 @@ const MovieCarousel = ({
       <div className="movie-carousel__empty-icon">🎬</div>
       <p className="movie-carousel__empty-message">No movies available</p>
     </div>
-  )
+  );
 
   const getCategoryIcon = () => {
     switch (category) {
-      case 'popular':
-        return '🔥'
-      case 'top-rated':
-        return '⭐'
-      case 'upcoming':
-        return '🎬'
+      case "popular":
+        return "🔥";
+      case "top-rated":
+        return "⭐";
+      case "upcoming":
+        return "🎬";
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
     <section className={`movie-carousel movie-carousel--${category}`}>
@@ -136,7 +137,7 @@ const MovieCarousel = ({
             <Button
               variant="ghost"
               size="small"
-              onClick={() => handleScroll('left')}
+              onClick={() => handleScroll("left")}
               disabled={!canScrollLeft}
               aria-label="Scroll left"
               className="movie-carousel__nav-button"
@@ -146,7 +147,7 @@ const MovieCarousel = ({
             <Button
               variant="ghost"
               size="small"
-              onClick={() => handleScroll('right')}
+              onClick={() => handleScroll("right")}
               disabled={!canScrollRight}
               aria-label="Scroll right"
               className="movie-carousel__nav-button"
@@ -191,14 +192,17 @@ const MovieCarousel = ({
             <div
               className="movie-carousel__indicator-thumb"
               style={{
-                transform: `translateX(${(currentIndex / Math.max(movies.length - itemsPerView, 1)) * 100}%)`
+                transform: `translateX(${
+                  (currentIndex / Math.max(movies.length - itemsPerView, 1)) *
+                  100
+                }%)`,
               }}
             />
           </div>
         </div>
       )}
     </section>
-  )
-}
+  );
+};
 
-export default MovieCarousel
+export default MovieCarousel;
