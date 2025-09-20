@@ -90,16 +90,36 @@ const HomePage = () => {
   return (
     <div className="container">
       <Header />
-      <div style={{ padding: "20px" }}>
-        <h2>✅ API Working! Movies loaded:</h2>
-        <p>Popular: {popularMovies.length} movies</p>
-        <p>Top Rated: {topRatedMovies.length} movies</p>
-        <p>Upcoming: {upcomingMovies.length} movies</p>
-        <p>Check browser console for detailed API responses</p>
-      </div>
-      <MovieCarousel label="Popular Movies" />
-      <MovieCarousel label="Top Rated Movies" />
-      <MovieCarousel label="Upcoming Movies" />
+      <MovieCarousel
+        label="Popular Movies"
+        movies={popularMovies}
+        loading={loading}
+        error={error}
+        onMovieClick={(movie) =>
+          console.log("Popular movie clicked:", movie.title)
+        }
+        cardSize="medium"
+      />
+      <MovieCarousel
+        label="Top Rated Movies"
+        movies={topRatedMovies}
+        loading={loading}
+        error={error}
+        onMovieClick={(movie) =>
+          console.log("Top rated movie clicked:", movie.title)
+        }
+        cardSize="medium"
+      />
+      <MovieCarousel
+        label="Upcoming Movies"
+        movies={upcomingMovies}
+        loading={loading}
+        error={error}
+        onMovieClick={(movie) =>
+          console.log("Upcoming movie clicked:", movie.title)
+        }
+        cardSize="medium"
+      />
     </div>
   );
 };
