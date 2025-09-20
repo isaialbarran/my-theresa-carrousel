@@ -50,7 +50,7 @@ export const useSearch = (): UseSearchReturn => {
 
       const response: MovieResponse = await movieService.searchMovies(
         params.query,
-        params.page
+        params.page,
       );
 
       return {
@@ -61,7 +61,7 @@ export const useSearch = (): UseSearchReturn => {
         hasMore: params.page < response.total_pages,
       };
     },
-    []
+    [],
   );
 
   // Use useAsyncQuery for handling search requests
@@ -102,7 +102,7 @@ export const useSearch = (): UseSearchReturn => {
       });
       await execute({ query: searchQuery, page: 1 });
     },
-    [execute]
+    [execute],
   );
 
   const loadMore = useCallback(async () => {
@@ -145,6 +145,6 @@ export const useSearch = (): UseSearchReturn => {
       search,
       loadMore,
       clear,
-    ]
+    ],
   );
 };

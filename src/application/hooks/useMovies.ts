@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { Movie } from "../../domain/entities/Movie";
 import { MovieCategory } from "../../domain/entities/Category";
 import type { MovieResponse } from "../../domain/repositories/MovieRepository";
@@ -30,13 +30,13 @@ export const useMovies = (category: MovieCategory, initialPage = 1) => {
     totalPages: 1,
   });
 
-  const loadMovies = async (page = initialPage, append = false) => {
+  const loadMovies = useCallback(async (page = initialPage, append = false) => {
     setState((prev) => ({ ...prev, loading: true, error: null }));
 
     try {
       const response: MovieResponse = await movieService.getMoviesByCategory(
         category,
-        page
+        page,
       );
 
       setState((prev) => ({
@@ -56,7 +56,7 @@ export const useMovies = (category: MovieCategory, initialPage = 1) => {
         error: error instanceof Error ? error.message : "Failed to load movies",
       }));
     }
-  };
+  }, [category, initialPage]);
 
   const loadMore = async () => {
     if (state.loading || !state.hasMore) return;
@@ -79,8 +79,8 @@ export const useMovies = (category: MovieCategory, initialPage = 1) => {
   };
 
   useEffect(() => {
-    loadMovies();
-  }, [category, loadMovies]);
+    void loadMovies();
+  }, [loadMovies]);
 
   const actions: UseMoviesActions = {
     loadMovies: () => loadMovies(),
