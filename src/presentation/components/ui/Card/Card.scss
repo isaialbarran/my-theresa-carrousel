@@ -1,3 +1,74 @@
+@import '../../../../styles/themes/mixins';
+
 .card {
-  // Card component styles will be added here
+  @include card-base;
+
+  // Variant styles
+  &--default {
+    box-shadow: $shadow-base;
+  }
+
+  &--elevated {
+    @include card-elevated;
+  }
+
+  &--outlined {
+    @include card-outlined;
+  }
+
+  &--flat {
+    box-shadow: none;
+    background-color: var(--surface-variant);
+
+    &:hover {
+      background-color: var(--border-light);
+    }
+  }
+
+  // Padding variants
+  &--padding-none {
+    padding: 0;
+  }
+
+  &--padding-small {
+    padding: $spacing-3;
+  }
+
+  &--padding-medium {
+    padding: $spacing-5;
+  }
+
+  &--padding-large {
+    padding: $spacing-8;
+  }
+
+  // Clickable state
+  &--clickable {
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:focus {
+      @include focus-ring;
+    }
+  }
+
+  // Loading state
+  &--loading {
+    @include loading-shimmer;
+    min-height: 200px;
+  }
+
+  // Error state
+  &--error {
+    border-color: var(--error);
+    background-color: rgba(var(--error-rgb), 0.05);
+  }
 }

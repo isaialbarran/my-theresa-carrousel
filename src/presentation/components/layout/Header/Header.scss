@@ -1,3 +1,17 @@
+@import '../../../../styles/themes/mixins';
+
 .header-section {
-  // Header specific styles will be added here
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: $spacing-4;
+
+  .content {
+    @include container;
+    color: var(--text-primary);
+  }
+
+  .label {
+    @include text-h3;
+    color: var(--primary);
+  }
 }

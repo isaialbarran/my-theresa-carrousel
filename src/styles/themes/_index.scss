@@ -1,0 +1,49 @@
+// =============================================================================
+// THEME INDEX
+// =============================================================================
+
+// Import theme foundation
+@import 'variables';
+@import 'mixins';
+
+// Theme Application
+// -----------------------------------------------------------------------------
+
+// Apply theme to root
+:root {
+  @include theme-colors($light-theme);
+
+  // Add RGB variants for rgba() usage
+  --primary-rgb: #{red(map-get($light-theme, primary))}, #{green(map-get($light-theme, primary))}, #{blue(map-get($light-theme, primary))};
+  --secondary-rgb: #{red(map-get($light-theme, secondary))}, #{green(map-get($light-theme, secondary))}, #{blue(map-get($light-theme, secondary))};
+  --success-rgb: #{red(map-get($light-theme, success))}, #{green(map-get($light-theme, success))}, #{blue(map-get($light-theme, success))};
+  --warning-rgb: #{red(map-get($light-theme, warning))}, #{green(map-get($light-theme, warning))}, #{blue(map-get($light-theme, warning))};
+  --error-rgb: #{red(map-get($light-theme, error))}, #{green(map-get($light-theme, error))}, #{blue(map-get($light-theme, error))};
+}
+
+// Dark theme
+[data-theme='dark'],
+.theme-dark {
+  @include theme-colors($dark-theme);
+
+  // Add RGB variants for rgba() usage
+  --primary-rgb: #{red(map-get($dark-theme, primary))}, #{green(map-get($dark-theme, primary))}, #{blue(map-get($dark-theme, primary))};
+  --secondary-rgb: #{red(map-get($dark-theme, secondary))}, #{green(map-get($dark-theme, secondary))}, #{blue(map-get($dark-theme, secondary))};
+  --success-rgb: #{red(map-get($dark-theme, success))}, #{green(map-get($dark-theme, success))}, #{blue(map-get($dark-theme, success))};
+  --warning-rgb: #{red(map-get($dark-theme, warning))}, #{green(map-get($dark-theme, warning))}, #{blue(map-get($dark-theme, warning))};
+  --error-rgb: #{red(map-get($dark-theme, error))}, #{green(map-get($dark-theme, error))}, #{blue(map-get($dark-theme, error))};
+}
+
+// Auto theme (follows system preference)
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    @include theme-colors($dark-theme);
+
+    // Add RGB variants for rgba() usage
+    --primary-rgb: #{red(map-get($dark-theme, primary))}, #{green(map-get($dark-theme, primary))}, #{blue(map-get($dark-theme, primary))};
+    --secondary-rgb: #{red(map-get($dark-theme, secondary))}, #{green(map-get($dark-theme, secondary))}, #{blue(map-get($dark-theme, secondary))};
+    --success-rgb: #{red(map-get($dark-theme, success))}, #{green(map-get($dark-theme, success))}, #{blue(map-get($dark-theme, success))};
+    --warning-rgb: #{red(map-get($dark-theme, warning))}, #{green(map-get($dark-theme, warning))}, #{blue(map-get($dark-theme, warning))};
+    --error-rgb: #{red(map-get($dark-theme, error))}, #{green(map-get($dark-theme, error))}, #{blue(map-get($dark-theme, error))};
+  }
+}
