@@ -1,3 +1,312 @@
-.carousel-section {
-  // Carousel specific styles will be added here
+@import '../../../../styles/themes/mixins';
+
+.movie-carousel {
+  margin-bottom: $spacing-8;
+
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-6;
+    padding: 0 $spacing-4;
+
+    @include media-max-md {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-3;
+    }
+  }
+
+  &__title {
+    @include text-h3;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  &__navigation {
+    display: flex;
+    gap: $spacing-2;
+
+    @include media-max-md {
+      align-self: flex-end;
+    }
+  }
+
+  &__nav-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    @include flex-center;
+    transition: all $transition-base;
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: var(--surface-variant);
+      transform: scale(1.05);
+    }
+  }
+
+  &__content {
+    position: relative;
+    padding: 0 $spacing-4;
+  }
+
+  &__grid {
+    display: flex;
+    gap: $spacing-4;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    padding-bottom: $spacing-2;
+
+    // Hide scrollbar
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    // Responsive grid behavior
+    @include media-max-sm {
+      gap: $spacing-3;
+      scroll-snap-type: x mandatory;
+    }
+
+    @include media-sm {
+      gap: $spacing-4;
+    }
+  }
+
+  &__item {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+
+    // Responsive sizing
+    @include media-max-sm {
+      width: 160px;
+    }
+
+    @include media-sm {
+      width: 180px;
+    }
+
+    @include media-md {
+      width: 200px;
+    }
+
+    @include media-lg {
+      width: 220px;
+    }
+
+    @include media-xl {
+      width: 240px;
+    }
+  }
+
+  &__card {
+    height: 100%;
+  }
+
+  // Loading skeleton styles
+  &__skeleton {
+    flex-shrink: 0;
+    width: 200px;
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    background-color: var(--surface);
+
+    @include media-max-sm {
+      width: 160px;
+    }
+
+    @include media-sm {
+      width: 180px;
+    }
+
+    &-image {
+      width: 100%;
+      height: 280px;
+      @include loading-shimmer;
+      border-radius: $border-radius-lg $border-radius-lg 0 0;
+
+      @include media-max-sm {
+        height: 240px;
+      }
+    }
+
+    &-content {
+      padding: $spacing-4;
+    }
+
+    &-title {
+      height: 20px;
+      @include loading-shimmer;
+      border-radius: $border-radius-base;
+      margin-bottom: $spacing-2;
+    }
+
+    &-meta {
+      height: 14px;
+      width: 60%;
+      @include loading-shimmer;
+      border-radius: $border-radius-base;
+    }
+  }
+
+  // Error state
+  &__error {
+    @include flex-column-center;
+    padding: $spacing-8;
+    text-align: center;
+    color: var(--text-secondary);
+
+    &-icon {
+      font-size: $font-size-4xl;
+      margin-bottom: $spacing-4;
+    }
+
+    &-message {
+      @include text-body;
+      margin-bottom: $spacing-4;
+      color: var(--text-hint);
+    }
+  }
+
+  // Empty state
+  &__empty {
+    @include flex-column-center;
+    padding: $spacing-8;
+    text-align: center;
+    color: var(--text-hint);
+
+    &-icon {
+      font-size: $font-size-4xl;
+      margin-bottom: $spacing-4;
+      opacity: 0.6;
+    }
+
+    &-message {
+      @include text-body;
+      color: var(--text-hint);
+    }
+  }
+
+  // Mobile scroll indicators
+  &__indicators {
+    display: none;
+    margin-top: $spacing-4;
+    padding: 0 $spacing-4;
+
+    @include media-max-md {
+      display: block;
+    }
+  }
+
+  &__indicator-track {
+    width: 100%;
+    height: 4px;
+    background-color: var(--border-light);
+    border-radius: $border-radius-full;
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__indicator-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 30%;
+    background-color: var(--primary);
+    border-radius: $border-radius-full;
+    transition: transform $transition-slow;
+  }
+
+  // Responsive adjustments
+  @include media-max-sm {
+    margin-bottom: $spacing-6;
+
+    &__header {
+      padding: 0 $spacing-3;
+      margin-bottom: $spacing-4;
+    }
+
+    &__content {
+      padding: 0 $spacing-3;
+    }
+
+    &__title {
+      @include text-h4;
+    }
+  }
+
+  // Hover effects for desktop
+  @include media-lg {
+    &__grid {
+      &:hover {
+        .movie-carousel__item {
+          opacity: 0.7;
+          transform: scale(0.95);
+          transition: all $transition-base;
+
+          &:hover {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      }
+    }
+  }
+
+  // Focus management for accessibility
+  &__grid:focus-within {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+    border-radius: $border-radius-lg;
+  }
+
+  // Print styles
+  @media print {
+    &__navigation {
+      display: none;
+    }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: $spacing-4;
+      overflow: visible;
+    }
+
+    &__indicators {
+      display: none;
+    }
+  }
+}
+
+// Animation for smooth appearance
+@keyframes carousel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.movie-carousel {
+  animation: carousel-fade-in 0.6s ease-out;
+}
+
+// Custom focus styles for better accessibility
+.movie-carousel__item:focus-within {
+  .movie-carousel__card {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 2px var(--border-focus);
+  }
 }
