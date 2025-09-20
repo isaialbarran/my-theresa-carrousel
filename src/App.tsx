@@ -1,32 +1,40 @@
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import HomePage from "./presentation/pages/HomePage";
 import WishlistPage from "./presentation/pages/WishlistPage";
-import { ThemeProvider } from "./presentation/hooks/useTheme";
-import { WishlistProvider } from "./presentation/hooks/useWishlist";
-import { RouterProvider, useRouter } from "./presentation/hooks/useRouter";
+import MovieDetailPage from "./presentation/pages/MovieDetailPage";
 import "./styles/globals.scss";
 import "./App.css";
 
-const AppRouter = () => {
-  const { currentRoute } = useRouter();
+interface AppProps {
+  initialRoute?: string;
+}
 
-  switch (currentRoute) {
-    case '/wishlist':
-      return <WishlistPage />;
-    case '/':
-    default:
-      return <HomePage />;
-  }
-};
+function App({ initialRoute }: AppProps) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const hasNavigatedRef = useRef(false);
 
-function App() {
+  useEffect(() => {
+    // Handle initial route from SSR only on first load
+    if (
+      initialRoute &&
+      initialRoute !== location.pathname &&
+      typeof window !== "undefined" &&
+      !hasNavigatedRef.current
+    ) {
+      hasNavigatedRef.current = true;
+      navigate(initialRoute, { replace: true });
+    }
+  }, [initialRoute, location.pathname, navigate]);
+
   return (
-    <ThemeProvider defaultTheme="auto">
-      <WishlistProvider>
-        <RouterProvider>
-          <AppRouter />
-        </RouterProvider>
-      </WishlistProvider>
-    </ThemeProvider>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/wishlist" element={<WishlistPage />} />
+      <Route path="/movie/:id" element={<MovieDetailPage />} />
+      <Route path="*" element={<HomePage />} />
+    </Routes>
   );
 }
 

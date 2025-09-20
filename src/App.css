@@ -1,12 +1,10 @@
 .container {
-  border: 2px dashed #999;
   padding: 20px;
   background-color: white;
   min-height: 600px;
 }
 
 .section {
-  border: 2px dashed #999;
   margin-bottom: 20px;
   position: relative;
 }
@@ -78,14 +76,12 @@
 }
 
 .container {
-  border: 2px dashed #999;
   padding: 20px;
   background-color: white;
   min-height: 600px;
 }
 
 .header {
-  border: 2px dashed #999;
   padding: 20px;
   margin-bottom: 20px;
   min-height: 80px;
@@ -101,7 +97,6 @@
 }
 
 .image-area {
-  border: 2px dashed #999;
   padding: 20px;
   flex: 2;
   display: flex;
@@ -109,7 +104,6 @@
 }
 
 .button-description-area {
-  border: 2px dashed #999;
   padding: 20px;
   flex: 1;
   display: flex;
@@ -117,7 +111,6 @@
 }
 
 .additional-info {
-  border: 2px dashed #999;
   padding: 20px;
   min-height: 120px;
   display: flex;

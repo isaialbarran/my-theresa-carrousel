@@ -1,8 +1,8 @@
-import type { MovieRepository, MovieResponse } from '../../domain/repositories/MovieRepository';
-import type { Movie, MovieDetails } from '../../domain/entities/Movie';
-import type { Category } from '../../domain/entities/Category';
-import { MovieCategory } from '../../domain/entities/Category';
-import { movieRepository } from '../../infrastructure/repositories/movieRepository.impl';
+import type { MovieRepository, MovieResponse } from "../../domain/repositories/MovieRepository";
+import type { Movie, MovieDetails } from "../../domain/entities/Movie";
+import type { Category } from "../../domain/entities/Category";
+import { MovieCategory } from "../../domain/entities/Category";
+import { movieRepository } from "../../infrastructure/repositories/movieRepository.impl";
 
 export class MovieService {
   private readonly repository: MovieRepository;
@@ -15,7 +15,7 @@ export class MovieService {
     try {
       return await this.repository.getPopularMovies(page);
     } catch (error) {
-      console.error('Error fetching popular movies:', error);
+      console.error("Error fetching popular movies:", error);
       throw error;
     }
   }
@@ -24,7 +24,7 @@ export class MovieService {
     try {
       return await this.repository.getTopRatedMovies(page);
     } catch (error) {
-      console.error('Error fetching top rated movies:', error);
+      console.error("Error fetching top rated movies:", error);
       throw error;
     }
   }
@@ -33,7 +33,7 @@ export class MovieService {
     try {
       return await this.repository.getUpcomingMovies(page);
     } catch (error) {
-      console.error('Error fetching upcoming movies:', error);
+      console.error("Error fetching upcoming movies:", error);
       throw error;
     }
   }
@@ -42,7 +42,7 @@ export class MovieService {
     try {
       return await this.repository.getNowPlayingMovies(page);
     } catch (error) {
-      console.error('Error fetching now playing movies:', error);
+      console.error("Error fetching now playing movies:", error);
       throw error;
     }
   }
@@ -67,7 +67,7 @@ export class MovieService {
 
   async searchMovies(query: string, page: number = 1): Promise<MovieResponse> {
     if (!query.trim()) {
-      throw new Error('Search query cannot be empty');
+      throw new Error("Search query cannot be empty");
     }
 
     try {
@@ -82,7 +82,7 @@ export class MovieService {
     try {
       return await this.repository.getGenres();
     } catch (error) {
-      console.error('Error fetching genres:', error);
+      console.error("Error fetching genres:", error);
       throw error;
     }
   }
@@ -93,16 +93,16 @@ export class MovieService {
       const [popular, topRated, upcoming] = await Promise.all([
         this.getPopularMovies(1),
         this.getTopRatedMovies(1),
-        this.getUpcomingMovies(1)
+        this.getUpcomingMovies(1),
       ]);
 
       return {
         popular: popular.results.slice(0, 10),
         topRated: topRated.results.slice(0, 10),
-        upcoming: upcoming.results.slice(0, 10)
+        upcoming: upcoming.results.slice(0, 10),
       };
     } catch (error) {
-      console.error('Error fetching featured movies:', error);
+      console.error("Error fetching featured movies:", error);
       throw error;
     }
   }
@@ -115,13 +115,13 @@ export class MovieService {
 
       // Filter movies by genre
       const filteredMovies = response.results.filter(movie =>
-        movie.genre_ids.includes(genreId)
+        movie.genre_ids.includes(genreId),
       );
 
       return {
         ...response,
         results: filteredMovies,
-        total_results: filteredMovies.length
+        total_results: filteredMovies.length,
       };
     } catch (error) {
       console.error(`Error fetching movies for genre ${genreId}:`, error);
@@ -129,7 +129,7 @@ export class MovieService {
     }
   }
 
-  getImageUrl(path: string | null, size: 'w200' | 'w300' | 'w400' | 'w500' | 'original' = 'w500'): string | null {
+  getImageUrl(path: string | null, size: "w200" | "w300" | "w400" | "w500" | "original" = "w500"): string | null {
     if (!path) return null;
     return `https://image.tmdb.org/t/p/${size}${path}`;
   }

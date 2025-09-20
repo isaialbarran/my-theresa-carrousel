@@ -1,140 +1,160 @@
-import { useState, useMemo, useCallback } from 'react'
-import type { ReactNode } from 'react'
-import Header from '../../components/layout/Header'
-import MovieCard from '../../components/features/MovieCard'
-import MovieDetail from '../../components/features/MovieDetail'
-import Button from '../../components/ui/Button'
-import VirtualGrid from '../../components/ui/VirtualGrid'
-import { useWishlist } from '../../hooks/useWishlist'
-import { useRouter } from '../../hooks/useRouter'
-import { useDebounce } from '../../hooks/useDebounce'
-import type { Movie } from '../../../domain/entities/Movie'
-import './WishlistPage.scss'
+import { useState, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import type { ReactNode } from "react";
+import PageLayout from "../../components/layout/PageLayout/PageLayout";
+import MovieCard from "../../components/features/MovieCard";
+import MovieDetail from "../../components/features/MovieDetail";
+import Button from "../../components/ui/Button";
+import VirtualGrid from "../../components/ui/VirtualGrid";
+import { useWishlist, useWishlistActions, useWishlistCount } from "../../../application/store/appStore";
+import { useDebounce } from "../../hooks/useDebounce";
+import type { Movie } from "../../../domain/entities/Movie";
+import "./WishlistPage.scss";
 
 const WishlistPage = () => {
-  const { wishlist, clearWishlist, wishlistCount } = useWishlist()
-  const { navigate } = useRouter()
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null)
-  const [sortBy, setSortBy] = useState<'added' | 'title' | 'rating' | 'year'>('added')
-  const [searchQuery, setSearchQuery] = useState('')
+  const wishlist = useWishlist();
+  const wishlistCount = useWishlistCount();
+  const { clearWishlist } = useWishlistActions();
+  const navigate = useNavigate();
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [sortBy, setSortBy] = useState<"added" | "title" | "rating" | "year">(
+    "added",
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+
 
   // Debounce search query to avoid excessive filtering
-  const debouncedSearchQuery = useDebounce(searchQuery, 300)
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
   const handleMovieClick = useCallback((movie: Movie) => {
-    setSelectedMovie(movie)
-    document.body.classList.add('modal-open')
-  }, [])
+    setSelectedMovie(movie);
+    document.body.classList.add("modal-open");
+  }, []);
 
   const handleCloseDetail = useCallback(() => {
-    setSelectedMovie(null)
-    document.body.classList.remove('modal-open')
-  }, [])
+    setSelectedMovie(null);
+    document.body.classList.remove("modal-open");
+  }, []);
 
   const handleClearWishlist = useCallback(() => {
-    if (window.confirm('Are you sure you want to clear your entire wishlist?')) {
-      clearWishlist()
+    if (
+      window.confirm("Are you sure you want to clear your entire wishlist?")
+    ) {
+      clearWishlist();
     }
-  }, [clearWishlist])
+  }, [clearWishlist]);
 
-  const handleSortChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortBy(e.target.value as typeof sortBy)
-  }, [])
+  const handleSortChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSortBy(e.target.value as typeof sortBy);
+    },
+    [],
+  );
 
   const handleNavigateHome = useCallback(() => {
-    navigate('/')
-  }, [navigate])
+    navigate("/");
+  }, [navigate]);
 
-  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
-  }, [])
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(e.target.value);
+    },
+    [],
+  );
 
   const handleClearSearch = useCallback(() => {
-    setSearchQuery('')
-  }, [])
+    setSearchQuery("");
+  }, []);
 
   const sortedAndFilteredMovies = useMemo(() => {
-    if (wishlist.length === 0) return []
+    if (wishlist.length === 0) return [];
 
-    let movies = [...wishlist]
+    let movies = [...wishlist];
 
     // Apply search filter
     if (debouncedSearchQuery.trim()) {
-      const searchTerm = debouncedSearchQuery.toLowerCase().trim()
-      movies = movies.filter(movie =>
-        movie.title.toLowerCase().includes(searchTerm) ||
-        (movie.overview && movie.overview.toLowerCase().includes(searchTerm))
-      )
+      const searchTerm = debouncedSearchQuery.toLowerCase().trim();
+      movies = movies.filter(
+        (movie) =>
+          movie.title.toLowerCase().includes(searchTerm) ||
+          (movie.overview && movie.overview.toLowerCase().includes(searchTerm)),
+      );
     }
 
     // Apply sorting
     switch (sortBy) {
-      case 'title':
-        movies.sort((a, b) => a.title.localeCompare(b.title))
-        break
-      case 'rating':
-        movies.sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0))
-        break
-      case 'year':
+      case "title":
+        movies.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "rating":
+        movies.sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0));
+        break;
+      case "year":
         movies.sort((a, b) => {
-          const yearA = new Date(a.release_date || '').getFullYear()
-          const yearB = new Date(b.release_date || '').getFullYear()
-          return yearB - yearA
-        })
-        break
-      case 'added':
+          const yearA = new Date(a.release_date || "").getFullYear();
+          const yearB = new Date(b.release_date || "").getFullYear();
+          return yearB - yearA;
+        });
+        break;
+      case "added":
       default:
         // Keep original order (last added first)
-        movies.reverse()
-        break
+        movies.reverse();
+        break;
     }
 
-    return movies
-  }, [wishlist, sortBy, debouncedSearchQuery])
+    return movies;
+  }, [wishlist, sortBy, debouncedSearchQuery]);
 
-  const EmptyState = useMemo((): ReactNode => (
-    <div className="wishlist-page__empty">
-      <div className="wishlist-page__empty-icon">🎬</div>
-      <h2>Your wishlist is empty</h2>
-      <p>Start adding movies you want to watch later!</p>
-      <Button
-        variant="primary"
-        onClick={handleNavigateHome}
-      >
-        Browse Movies
-      </Button>
-    </div>
-  ), [handleNavigateHome])
+  const EmptyState = useMemo(
+    (): ReactNode => (
+      <div className="wishlist-page__empty">
+        <div className="wishlist-page__empty-icon">🎬</div>
+        <h2>Your wishlist is empty</h2>
+        <p>Start adding movies you want to watch later!</p>
+        <Button variant="primary" onClick={handleNavigateHome}>
+          Browse Movies
+        </Button>
+      </div>
+    ),
+    [handleNavigateHome],
+  );
 
   // Constants for virtualization
-  const ITEM_WIDTH = 280
-  const ITEM_HEIGHT = 420
-  const CONTAINER_HEIGHT = 600
-  const USE_VIRTUALIZATION_THRESHOLD = 20
+  const ITEM_WIDTH = 280;
+  const ITEM_HEIGHT = 420;
+  const CONTAINER_HEIGHT = 600;
+  const USE_VIRTUALIZATION_THRESHOLD = 20;
 
   // Render item function for VirtualGrid
-  const renderMovieItem = useCallback((movie: Movie, index: number) => (
-    <MovieCard
-      key={movie.id}
-      movie={movie}
-      onCardClick={handleMovieClick}
-      size="medium"
-      className="movie-card--wishlist"
-    />
-  ), [handleMovieClick])
+  const renderMovieItem = useCallback(
+    (movie: Movie) => (
+      <MovieCard
+        key={movie.id}
+        movie={movie}
+        onCardClick={handleMovieClick}
+        size="medium"
+        className="movie-card--wishlist"
+      />
+    ),
+    [handleMovieClick],
+  );
 
   return (
-    <div className="container">
-      <Header />
-
+    <PageLayout>
       <div className="wishlist-page">
         <div className="wishlist-page__header">
           <div className="wishlist-page__title">
             <h1>My Wishlist</h1>
             <span className="wishlist-page__count">
-              {sortedAndFilteredMovies.length} {sortedAndFilteredMovies.length === 1 ? 'movie' : 'movies'}
-              {debouncedSearchQuery && wishlistCount !== sortedAndFilteredMovies.length && (
-                <span className="wishlist-page__count-total"> of {wishlistCount}</span>
+              {sortedAndFilteredMovies.length}{" "}
+              {sortedAndFilteredMovies.length === 1 ? "movie" : "movies"}
+              {debouncedSearchQuery &&
+                wishlistCount !== sortedAndFilteredMovies.length && (
+                <span className="wishlist-page__count-total">
+                  {" "}
+                    of {wishlistCount}
+                </span>
               )}
             </span>
           </div>
@@ -201,7 +221,11 @@ const WishlistPage = () => {
             <h3>No movies found</h3>
             <p>Try adjusting your search or filter criteria.</p>
             {debouncedSearchQuery && (
-              <Button variant="outline" size="small" onClick={handleClearSearch}>
+              <Button
+                variant="outline"
+                size="small"
+                onClick={handleClearSearch}
+              >
                 Clear Search
               </Button>
             )}
@@ -232,7 +256,10 @@ const WishlistPage = () => {
 
         {selectedMovie && (
           <div className="movie-detail-modal">
-            <div className="movie-detail-modal__backdrop" onClick={handleCloseDetail} />
+            <div
+              className="movie-detail-modal__backdrop"
+              onClick={handleCloseDetail}
+            />
             <div className="movie-detail-modal__content">
               <MovieDetail
                 movie={selectedMovie}
@@ -243,8 +270,8 @@ const WishlistPage = () => {
           </div>
         )}
       </div>
-    </div>
-  )
-}
+    </PageLayout>
+  );
+};
 
-export default WishlistPage
+export default WishlistPage;

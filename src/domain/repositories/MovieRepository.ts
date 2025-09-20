@@ -1,6 +1,6 @@
-import type { Movie, MovieDetails } from '../entities/Movie';
-import type { Category } from '../entities/Category';
-import { MovieCategory } from '../entities/Category';
+import type { Movie, MovieDetails } from "../entities/Movie";
+import type { Category } from "../entities/Category";
+import { MovieCategory } from "../entities/Category";
 
 export interface MovieResponse {
   page: number;

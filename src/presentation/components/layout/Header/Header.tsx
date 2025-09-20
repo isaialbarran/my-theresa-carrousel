@@ -1,53 +1,45 @@
-import Button from '../../ui/Button'
-import { useWishlist } from '../../../hooks/useWishlist'
-import { useRouter } from '../../../hooks/useRouter'
-import './Header.scss'
+import { Link, useLocation } from "react-router-dom";
+import { useWishlistCount } from "../../../../application/store/appStore";
+import "./Header.scss";
 
 const Header = () => {
-  const { wishlistCount } = useWishlist()
-  const { navigate, currentRoute } = useRouter()
-
-  const navigateToHome = () => {
-    navigate('/')
-  }
-
-  const navigateToWishlist = () => {
-    navigate('/wishlist')
-  }
+  const wishlistCount = useWishlistCount();
+  const location = useLocation();
+  const currentRoute = location.pathname;
 
   return (
     <header className="header">
       <div className="header__container">
-        <div className="header__brand" onClick={navigateToHome}>
+        <Link to="/" className="header__brand">
           <h1 className="header__title">🎬 MovieApp</h1>
-        </div>
+        </Link>
 
         <nav className="header__nav">
-          <Button
-            variant={currentRoute === '/' ? 'primary' : 'ghost'}
-            size="medium"
-            onClick={navigateToHome}
-            className="header__nav-btn"
+          <Link
+            to="/"
+            className={`header__nav-link header__nav-btn btn btn--medium ${
+              currentRoute === "/" ? "btn--primary" : "btn--ghost"
+            }`}
           >
             Home
-          </Button>
+          </Link>
 
-          <Button
-            variant={currentRoute === '/wishlist' ? 'primary' : 'ghost'}
-            size="medium"
-            onClick={navigateToWishlist}
-            className="header__nav-btn header__wishlist-btn"
+          <Link
+            to="/wishlist"
+            className={`header__nav-link header__nav-btn header__wishlist-btn btn btn--medium ${
+              currentRoute === "/wishlist" ? "btn--primary" : "btn--ghost"
+            }`}
           >
             <span className="header__wishlist-icon">❤️</span>
             <span className="header__wishlist-text">Wishlist</span>
             {wishlistCount > 0 && (
               <span className="header__wishlist-count">{wishlistCount}</span>
             )}
-          </Button>
+          </Link>
         </nav>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

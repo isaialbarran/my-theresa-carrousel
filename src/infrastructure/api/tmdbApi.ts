@@ -1,7 +1,7 @@
-import type { MovieRepository, MovieResponse, ApiError } from '../../domain/repositories/MovieRepository';
-import type { MovieDetails } from '../../domain/entities/Movie';
-import type { Category } from '../../domain/entities/Category';
-import { MovieCategory } from '../../domain/entities/Category';
+import type { MovieRepository, MovieResponse, ApiError } from "../../domain/repositories/MovieRepository";
+import type { MovieDetails } from "../../domain/entities/Movie";
+import type { Category } from "../../domain/entities/Category";
+import { MovieCategory } from "../../domain/entities/Category";
 
 const ACCESS_TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
 const BASE_URL = import.meta.env.VITE_TMDB_BASE_URL;
@@ -12,8 +12,8 @@ class TMDBApi implements MovieRepository {
 
     const response = await fetch(url, {
       headers: {
-        'Authorization': `Bearer ${ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
       },
     });
 
@@ -39,7 +39,7 @@ class TMDBApi implements MovieRepository {
   }
 
   async getGenres(): Promise<Category[]> {
-    const response = await this.makeRequest<{ genres: Category[] }>('/genre/movie/list');
+    const response = await this.makeRequest<{ genres: Category[] }>("/genre/movie/list");
     return response.genres;
   }
 

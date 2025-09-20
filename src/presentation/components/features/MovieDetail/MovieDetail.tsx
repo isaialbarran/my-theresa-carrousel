@@ -8,10 +8,10 @@ import WishlistButton from "../../ui/WishlistButton/WishlistButton";
 interface MovieDetailProps {
   movie: Movie;
   onClose?: () => void;
-  category?: 'popular' | 'top-rated' | 'upcoming' | 'default';
+  category?: "popular" | "top-rated" | "upcoming" | "default";
 }
 
-const MovieDetail = ({ movie, onClose, category = 'default' }: MovieDetailProps) => {
+const MovieDetail = ({ movie, onClose, category = "default" }: MovieDetailProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -164,7 +164,7 @@ const MovieDetail = ({ movie, onClose, category = 'default' }: MovieDetailProps)
                 onClick={() =>
                   window.open(
                     `https://www.themoviedb.org/movie/${movie.id}`,
-                    "_blank"
+                    "_blank",
                   )
                 }
                 className="movie-detail__tmdb-button"

@@ -1,4 +1,5 @@
 import { memo, useCallback, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import type { Movie } from "../../../../domain/entities/Movie";
 import Card from "../../ui/Card";
 import WishlistButton from "../../ui/WishlistButton/WishlistButton";
@@ -9,6 +10,7 @@ interface MovieCardProps {
   onCardClick?: (movie: Movie) => void;
   className?: string;
   size?: "small" | "medium" | "large";
+  enableNavigation?: boolean;
 }
 
 const MovieCard = memo(({
@@ -16,12 +18,17 @@ const MovieCard = memo(({
   onCardClick,
   className = "",
   size = "medium",
+  enableNavigation = true,
 }: MovieCardProps) => {
+  const navigate = useNavigate();
+
   const handleClick = useCallback(() => {
     if (onCardClick) {
       onCardClick(movie);
+    } else if (enableNavigation) {
+      navigate(`/movie/${movie.id}`);
     }
-  }, [onCardClick, movie]);
+  }, [onCardClick, movie, enableNavigation, navigate]);
 
   const releaseYear = useMemo(() => {
     return new Date(movie.release_date).getFullYear();
@@ -100,6 +107,6 @@ const MovieCard = memo(({
   );
 });
 
-MovieCard.displayName = 'MovieCard';
+MovieCard.displayName = "MovieCard";
 
 export default MovieCard;

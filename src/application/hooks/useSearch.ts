@@ -1,9 +1,23 @@
-import { useState, useCallback } from 'react';
-import type { Movie } from '../../domain/entities/Movie';
-import type { MovieResponse } from '../../domain/repositories/MovieRepository';
-import { movieService } from '../services/movieService';
+import { useState, useCallback, useMemo } from "react";
+import type { Movie } from "../../domain/entities/Movie";
+import type { MovieResponse } from "../../domain/repositories/MovieRepository";
+import { movieService } from "../services/movieService";
+import { useAsyncQuery } from "../../presentation/hooks/useAsyncQuery";
 
-interface UseSearchState {
+interface SearchParams {
+  query: string;
+  page: number;
+}
+
+interface SearchResult {
+  results: Movie[];
+  currentPage: number;
+  totalPages: number;
+  totalResults: number;
+  hasMore: boolean;
+}
+
+interface UseSearchReturn {
   results: Movie[];
   loading: boolean;
   error: string | null;
@@ -11,83 +25,126 @@ interface UseSearchState {
   currentPage: number;
   totalPages: number;
   totalResults: number;
-}
-
-interface UseSearchActions {
+  query: string;
   search: (query: string) => Promise<void>;
   loadMore: () => Promise<void>;
   clear: () => void;
 }
 
-export const useSearch = () => {
-  const [query, setQuery] = useState('');
-  const [state, setState] = useState<UseSearchState>({
-    results: [],
-    loading: false,
-    error: null,
-    hasMore: false,
+export const useSearch = (): UseSearchReturn => {
+  const [query, setQuery] = useState("");
+  const [accumulatedResults, setAccumulatedResults] = useState<Movie[]>([]);
+  const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 0,
     totalResults: 0,
+    hasMore: false,
   });
 
-  const searchMovies = async (searchQuery: string, page = 1, append = false) => {
-    if (!searchQuery.trim()) {
-      setState(prev => ({ ...prev, error: 'Search query cannot be empty' }));
-      return;
-    }
+  // Create async function for search
+  const searchFunction = useCallback(
+    async (params: SearchParams): Promise<SearchResult> => {
+      if (!params.query.trim()) {
+        throw new Error("Search query cannot be empty");
+      }
 
-    setState(prev => ({ ...prev, loading: true, error: null }));
+      const response: MovieResponse = await movieService.searchMovies(
+        params.query,
+        params.page
+      );
 
-    try {
-      const response: MovieResponse = await movieService.searchMovies(searchQuery, page);
-
-      setState(prev => ({
-        ...prev,
-        results: append ? [...prev.results, ...response.results] : response.results,
-        loading: false,
-        currentPage: page,
+      return {
+        results: response.results,
+        currentPage: params.page,
         totalPages: response.total_pages,
         totalResults: response.total_results,
-        hasMore: page < response.total_pages,
-      }));
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        loading: false,
-        error: error instanceof Error ? error.message : 'Search failed',
-      }));
-    }
-  };
+        hasMore: params.page < response.total_pages,
+      };
+    },
+    []
+  );
 
-  const search = useCallback(async (searchQuery: string) => {
-    setQuery(searchQuery);
-    await searchMovies(searchQuery, 1, false);
-  }, []);
+  // Use useAsyncQuery for handling search requests
+  const {
+    data: _searchData,
+    loading,
+    error,
+    execute,
+    reset,
+  } = useAsyncQuery<SearchResult, SearchParams>(searchFunction, {
+    onSuccess: (data) => {
+      setPagination({
+        currentPage: data.currentPage,
+        totalPages: data.totalPages,
+        totalResults: data.totalResults,
+        hasMore: data.hasMore,
+      });
+
+      // If this is page 1, replace results; otherwise append
+      if (data.currentPage === 1) {
+        setAccumulatedResults(data.results);
+      } else {
+        setAccumulatedResults((prev) => [...prev, ...data.results]);
+      }
+    },
+  });
+
+  // Actions
+  const search = useCallback(
+    async (searchQuery: string) => {
+      setQuery(searchQuery);
+      setAccumulatedResults([]);
+      setPagination({
+        currentPage: 1,
+        totalPages: 0,
+        totalResults: 0,
+        hasMore: false,
+      });
+      await execute({ query: searchQuery, page: 1 });
+    },
+    [execute]
+  );
 
   const loadMore = useCallback(async () => {
-    if (state.loading || !state.hasMore || !query) return;
-    await searchMovies(query, state.currentPage + 1, true);
-  }, [query, state.loading, state.hasMore, state.currentPage]);
+    if (loading || !pagination.hasMore || !query) return;
+    await execute({ query, page: pagination.currentPage + 1 });
+  }, [loading, pagination.hasMore, pagination.currentPage, query, execute]);
 
   const clear = useCallback(() => {
-    setQuery('');
-    setState({
-      results: [],
-      loading: false,
-      error: null,
-      hasMore: false,
+    setQuery("");
+    setAccumulatedResults([]);
+    setPagination({
       currentPage: 1,
       totalPages: 0,
       totalResults: 0,
+      hasMore: false,
     });
-  }, []);
+    reset();
+  }, [reset]);
 
-  const actions: UseSearchActions = {
-    search,
-    loadMore,
-    clear,
-  };
-
-  return { ...state, query, ...actions };
+  return useMemo(
+    () => ({
+      results: accumulatedResults,
+      loading,
+      error,
+      hasMore: pagination.hasMore,
+      currentPage: pagination.currentPage,
+      totalPages: pagination.totalPages,
+      totalResults: pagination.totalResults,
+      query,
+      search,
+      loadMore,
+      clear,
+    }),
+    [
+      accumulatedResults,
+      loading,
+      error,
+      pagination,
+      query,
+      search,
+      loadMore,
+      clear,
+    ]
+  );
 };

@@ -1,8 +1,8 @@
-import type { MovieRepository, MovieResponse } from '../../domain/repositories/MovieRepository';
-import type { MovieDetails } from '../../domain/entities/Movie';
-import type { Category } from '../../domain/entities/Category';
-import { MovieCategory } from '../../domain/entities/Category';
-import tmdbApi from '../api/tmdbApi';
+import type { MovieRepository, MovieResponse } from "../../domain/repositories/MovieRepository";
+import type { MovieDetails } from "../../domain/entities/Movie";
+import type { Category } from "../../domain/entities/Category";
+import { MovieCategory } from "../../domain/entities/Category";
+import tmdbApi from "../api/tmdbApi";
 
 export class MovieRepositoryImpl implements MovieRepository {
   async getMoviesByCategory(category: MovieCategory, page?: number): Promise<MovieResponse> {
