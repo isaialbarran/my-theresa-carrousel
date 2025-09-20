@@ -1,7 +1,7 @@
 /**
  * Utility to concatenate class names conditionally
  */
-export function cn(...classes: (string | undefined | null | false)[]): string {
+export function classNames(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(" ");
 }
 
@@ -45,12 +45,12 @@ export const classes = {
  * Loading component utility
  */
 export function createLoadingCard(message = "Loading..."): string {
-  return cn(classes.loadingCard, classes.flexCenter);
+  return classNames(classes.loadingCard, classes.flexCenter);
 }
 
 /**
  * Error component utility
  */
 export function createErrorCard(message = "Error occurred"): string {
-  return cn(classes.error, classes.flexCenter);
+  return classNames(classes.error, classes.flexCenter);
 }

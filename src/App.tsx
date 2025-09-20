@@ -1,13 +1,13 @@
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
+import type { AppRoute } from "./presentation/routing/routes";
 import HomePage from "./presentation/pages/HomePage";
 import WishlistPage from "./presentation/pages/WishlistPage";
 import MovieDetailPage from "./presentation/pages/MovieDetailPage";
 import "./styles/globals.scss";
-import "./App.css";
 
 interface AppProps {
-  initialRoute?: string;
+  initialRoute?: AppRoute;
 }
 
 function App({ initialRoute }: AppProps) {

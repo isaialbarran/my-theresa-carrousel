@@ -1,34 +1,24 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
-
-export type Route = "/" | "/wishlist";
-
-export const resolveRoute = (path: string): Route => {
-  const normalized = path.split("?")[0] ?? "/";
-
-  if (normalized.startsWith("/wishlist")) {
-    return "/wishlist";
-  }
-  return "/";
-};
+import { resolveRoutePath, type AppRoute } from "../routing/routes";
 
 interface RouterContextType {
-  currentRoute: Route;
-  navigate: (route: Route) => void;
+  currentRoute: AppRoute;
+  navigate: (route: AppRoute) => void;
 }
 
 const RouterContext = createContext<RouterContextType | undefined>(undefined);
 
 interface RouterProviderProps {
   children: ReactNode;
-  initialRoute?: Route;
+  initialRoute?: AppRoute;
 }
 
 export const RouterProvider = ({
   children,
   initialRoute = "/",
 }: RouterProviderProps) => {
-  const [currentRoute, setCurrentRoute] = useState<Route>(initialRoute);
+  const [currentRoute, setCurrentRoute] = useState<AppRoute>(initialRoute);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -36,12 +26,12 @@ export const RouterProvider = ({
     }
 
     // Initialize route from URL
-    const path = resolveRoute(window.location.pathname);
+    const path = resolveRoutePath(window.location.pathname);
     setCurrentRoute(path);
 
     // Listen to popstate events (back/forward browser navigation)
     const handlePopState = () => {
-      const nextRoute = resolveRoute(window.location.pathname);
+      const nextRoute = resolveRoutePath(window.location.pathname);
       setCurrentRoute(nextRoute);
     };
 
@@ -49,7 +39,7 @@ export const RouterProvider = ({
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
-  const navigate = (route: Route) => {
+  const navigate = (route: AppRoute) => {
     if (route !== currentRoute) {
       setCurrentRoute(route);
       if (typeof window !== "undefined") {

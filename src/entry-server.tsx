@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { renderToPipeableStream } from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
 import App from "./App.tsx";
+import { resolveRoutePath, type AppRoute } from "./presentation/routing/routes";
 
 interface RenderOptions {
   onShellReady?: () => void;
@@ -11,8 +12,8 @@ interface RenderOptions {
 }
 
 interface RenderResult {
-  stream: { pipe: (writable: NodeJS.WritableStream, options?: { end?: boolean }) => NodeJS.WritableStream; route: string };
-  initialRoute: string;
+  stream: { pipe: (writable: NodeJS.WritableStream, options?: { end?: boolean }) => NodeJS.WritableStream; route: AppRoute };
+  initialRoute: AppRoute;
   status: number;
 }
 
@@ -27,13 +28,14 @@ function getRouteStatus(path: string): number {
 }
 
 export function render(url: string, options: RenderOptions = {}): RenderResult {
-  const path = url.split("?")[0] ?? "/";
-  const status = getRouteStatus(path);
+  const rawPath = url.split("?")[0] ?? "/";
+  const initialRoute = resolveRoutePath(rawPath);
+  const status = getRouteStatus(rawPath);
 
   const { pipe } = renderToPipeableStream(
     <StrictMode>
       <StaticRouter location={url}>
-        <App initialRoute={path} />
+        <App initialRoute={initialRoute} />
       </StaticRouter>
     </StrictMode>,
     {
@@ -54,16 +56,17 @@ export function render(url: string, options: RenderOptions = {}): RenderResult {
   );
 
   return {
-    stream: { pipe, route: path },
-    initialRoute: path,
+    stream: { pipe, route: initialRoute },
+    initialRoute,
     status,
   };
 }
 
 // Legacy function for backwards compatibility - falls back to sync rendering
 export async function renderToString(url: string) {
-  const path = url.split("?")[0] ?? "/";
-  const status = getRouteStatus(path);
+  const rawPath = url.split("?")[0] ?? "/";
+  const initialRoute = resolveRoutePath(rawPath);
+  const status = getRouteStatus(rawPath);
 
   // For backwards compatibility, use the old sync approach
   const { renderToString: syncRenderToString } = await import("react-dom/server");
@@ -71,14 +74,14 @@ export async function renderToString(url: string) {
   const appHtml = syncRenderToString(
     <StrictMode>
       <StaticRouter location={url}>
-        <App initialRoute={path} />
+        <App initialRoute={initialRoute} />
       </StaticRouter>
     </StrictMode>,
   );
 
   return {
     appHtml,
-    initialRoute: path,
+    initialRoute,
     status,
   };
 }
