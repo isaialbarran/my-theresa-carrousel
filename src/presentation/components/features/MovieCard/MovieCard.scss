@@ -1,8 +1,8 @@
-@import '../../../../styles/themes/mixins';
+@use "../../../../styles/themes/mixins" as *;
 
 .movie-card {
   overflow: hidden;
-  transition: all $transition-slow;
+  transition: all $transition-base;
   cursor: pointer;
   position: relative;
 
@@ -168,7 +168,7 @@
 
   &__votes {
     &::before {
-      content: '•';
+      content: "•";
       margin-right: 4px;
     }
   }
@@ -204,7 +204,7 @@
       color: var(--text-hint);
 
       &::before {
-        content: '🎬';
+        content: "🎬";
       }
     }
   }

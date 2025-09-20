@@ -1,4 +1,4 @@
-@import '../../../../styles/themes/mixins';
+@use '../../../../styles/themes/mixins' as *;
 
 .wishlist-button {
   position: relative;

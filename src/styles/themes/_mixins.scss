@@ -2,14 +2,16 @@
 // THEME MIXINS
 // =============================================================================
 
-@import 'variables';
+@forward "variables";
+@use 'sass:map';
+@use "variables" as *;
 
 // Theme Functions
 // -----------------------------------------------------------------------------
 
 // Get theme color
 @function theme-color($key) {
-  @return map-get($current-theme, $key);
+  @return map.get($current-theme, $key);
 }
 
 // Color with opacity
@@ -348,25 +350,6 @@
 // Aspect ratio
 @mixin aspect-ratio($width: 1, $height: 1) {
   aspect-ratio: #{$width} / #{$height};
-
-  // Fallback for older browsers
-  @supports not (aspect-ratio: 1 / 1) {
-    position: relative;
-
-    &::before {
-      content: '';
-      display: block;
-      padding-top: percentage($height / $width);
-    }
-
-    > * {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-  }
 }
 
 // Loading animation
