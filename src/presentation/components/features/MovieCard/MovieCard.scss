@@ -2,12 +2,10 @@
 
 .movie-card {
   overflow: hidden;
-  transition: all $transition-base;
   cursor: pointer;
   position: relative;
 
   &:hover {
-    @include hover-lift(-8px);
     box-shadow: $shadow-xl;
   }
 
@@ -60,11 +58,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform $transition-slow;
-
-    .movie-card:hover & {
-      transform: scale(1.05);
-    }
   }
 
   &__overlay {
@@ -80,7 +73,6 @@
       rgba(0, 0, 0, 0.8) 100%
     );
     opacity: 0;
-    transition: opacity $transition-slow;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -126,7 +118,6 @@
 
       &:hover {
         background-color: rgba(255, 255, 255, 1);
-        transform: scale(1.1);
       }
 
       .wishlist-button__icon {
@@ -146,10 +137,6 @@
     margin: 0 0 $spacing-2 0;
     color: var(--text-primary);
     @include text-truncate-lines(2);
-
-    &:hover {
-      color: var(--primary);
-    }
   }
 
   &__meta {

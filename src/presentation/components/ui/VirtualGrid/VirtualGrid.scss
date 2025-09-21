@@ -35,26 +35,12 @@
   }
 
   &__item {
-    transition: transform $transition-fast;
-
     &:hover {
       z-index: 1;
     }
   }
 }
 
-// Performance optimizations
-.virtual-grid {
-  // Enable hardware acceleration
-  transform: translateZ(0);
-  will-change: scroll-position;
-
-  &__item {
-    // Optimize rendering
-    contain: layout style paint;
-    will-change: transform;
-  }
-}
 
 // Loading state
 .virtual-grid--loading {

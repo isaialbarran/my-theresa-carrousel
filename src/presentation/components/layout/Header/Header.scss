@@ -1,4 +1,4 @@
-@use '../../../../styles/themes/mixins' as *;
+@use "../../../../styles/themes/mixins" as *;
 
 .header {
   background-color: var(--surface);
@@ -25,15 +25,6 @@
 
   &__brand {
     cursor: pointer;
-    transition: transform $transition-base;
-
-    &:hover {
-      transform: scale(1.02);
-    }
-
-    &:active {
-      transform: scale(0.98);
-    }
   }
 
   &__title {
@@ -65,18 +56,11 @@
 
   &__nav-btn {
     position: relative;
-    transition: all $transition-base;
     text-decoration: none !important;
 
     &:hover {
       background-color: var(--surface-variant);
-      transform: translateY(-1px);
       text-decoration: none;
-    }
-
-    &:focus {
-      outline: 2px solid var(--primary);
-      outline-offset: 2px;
     }
 
     @include media-max-sm {
@@ -96,18 +80,8 @@
 
   &__wishlist-icon {
     font-size: 1.1em;
-    transition: transform $transition-base;
-
-    .header__wishlist-btn:hover & {
-      transform: scale(1.2);
-    }
   }
 
-  &__wishlist-text {
-    @include media-max-xs {
-      display: none;
-    }
-  }
 
   &__wishlist-count {
     @include flex-center;
@@ -120,7 +94,6 @@
     border-radius: $border-radius-full;
     padding: 0 $spacing-1;
     line-height: 1;
-    animation: pulse-scale 0.3s ease-out;
 
     @include media-max-sm {
       min-width: 18px;
@@ -130,32 +103,3 @@
   }
 }
 
-// Animation for wishlist count
-@keyframes pulse-scale {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-// Legacy header section styles for backwards compatibility
-.header-section {
-  background-color: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: $spacing-4;
-
-  .content {
-    @include container;
-    color: var(--text-primary);
-  }
-
-  .label {
-    @include text-h3;
-    color: var(--primary);
-  }
-}

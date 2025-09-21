@@ -6,7 +6,7 @@ interface ButtonProps {
   size?: "small" | "medium" | "large"
   disabled?: boolean
   className?: string
-  onClick?: () => void
+  onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void
   type?: "button" | "submit" | "reset"
   title?: string
   "aria-label"?: string

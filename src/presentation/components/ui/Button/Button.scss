@@ -23,13 +23,6 @@
 
     &:hover:not(:disabled) {
       background-color: var(--primary-variant);
-      @include hover-lift(-2px);
-      box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
-    }
-
-    &:active:not(:disabled) {
-      transform: translateY(0);
-      box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.3);
     }
 
     &:focus {
@@ -44,13 +37,6 @@
 
     &:hover:not(:disabled) {
       background-color: var(--secondary-variant);
-      @include hover-lift(-2px);
-      box-shadow: 0 4px 12px rgba(var(--secondary-rgb), 0.3);
-    }
-
-    &:active:not(:disabled) {
-      transform: translateY(0);
-      box-shadow: 0 2px 8px rgba(var(--secondary-rgb), 0.3);
     }
 
     &:focus {
@@ -67,13 +53,6 @@
     &:hover:not(:disabled) {
       background-color: var(--primary);
       color: var(--on-primary);
-      @include hover-lift(-2px);
-      box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
-    }
-
-    &:active:not(:disabled) {
-      transform: translateY(0);
-      box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.3);
     }
 
     &:focus {
@@ -89,12 +68,6 @@
     &:hover:not(:disabled) {
       background-color: var(--surface-variant);
       color: var(--text-primary);
-      transform: translateY(-1px);
-    }
-
-    &:active:not(:disabled) {
-      transform: translateY(0);
-      background-color: var(--border-light);
     }
 
     &:focus {

@@ -47,14 +47,6 @@
     cursor: pointer;
     user-select: none;
 
-    &:hover {
-      transform: translateY(-1px);
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
-
     &:focus {
       @include focus-ring;
     }
