@@ -2,6 +2,7 @@ import { useState } from "react";
 import PageLayout from "../../components/layout/PageLayout/PageLayout";
 import MovieCarousel from "../../components/features/MovieCarousel";
 import MovieDetail from "../../components/features/MovieDetail";
+import Modal from "../../components/ui/Modal";
 import { useMoviesByCategory } from "../../../application/hooks/useMoviesByCategory";
 import type { Movie } from "../../../domain/entities/Movie";
 import { MovieCategory } from "../../../domain/entities/Category";
@@ -24,13 +25,11 @@ const HomePage = () => {
   const handleMovieClick = (movie: Movie, category: "popular" | "top-rated" | "upcoming" | "default" = "default") => {
     setSelectedMovie(movie);
     setSelectedMovieCategory(category);
-    document.body.classList.add("modal-open");
   };
 
   const handleCloseDetail = () => {
     setSelectedMovie(null);
     setSelectedMovieCategory("default");
-    document.body.classList.remove("modal-open");
   };
 
   if (loading) {
@@ -86,18 +85,19 @@ const HomePage = () => {
         category="upcoming"
       />
 
-      {selectedMovie && (
-        <div className="movie-detail-modal">
-          <div className="movie-detail-modal__backdrop" onClick={handleCloseDetail} />
-          <div className="movie-detail-modal__content">
-            <MovieDetail
-              movie={selectedMovie}
-              onClose={handleCloseDetail}
-              category={selectedMovieCategory}
-            />
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={!!selectedMovie}
+        onClose={handleCloseDetail}
+        size="large"
+      >
+        {selectedMovie && (
+          <MovieDetail
+            movie={selectedMovie}
+            onClose={handleCloseDetail}
+            category={selectedMovieCategory}
+          />
+        )}
+      </Modal>
     </PageLayout>
   );
 };

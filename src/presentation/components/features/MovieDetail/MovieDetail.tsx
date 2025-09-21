@@ -2,6 +2,14 @@ import { useState } from "react";
 import type { Movie } from "../../../../domain/entities/Movie";
 import Button from "../../ui/Button";
 import Card from "../../ui/Card";
+import {
+  getMoviePosterUrl,
+  getMovieBackdropUrl,
+} from "../../../../shared/utils/image";
+import {
+  formatReleaseYear,
+  formatRating,
+} from "../../../../shared/utils/format";
 import "./MovieDetail.scss";
 import WishlistButton from "../../ui/WishlistButton/WishlistButton";
 
@@ -11,27 +19,13 @@ interface MovieDetailProps {
   category?: "popular" | "top-rated" | "upcoming" | "default";
 }
 
-const MovieDetail = ({ movie, onClose, category = "default" }: MovieDetailProps) => {
+const MovieDetail = ({
+  movie,
+  onClose,
+  category = "default",
+}: MovieDetailProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-
-  const getImageUrl = (posterPath: string | null) => {
-    if (!posterPath) return "/placeholder-movie.jpg";
-    return `https://image.tmdb.org/t/p/w500${posterPath}`;
-  };
-
-  const getBackdropUrl = (backdropPath: string | null) => {
-    if (!backdropPath) return null;
-    return `https://image.tmdb.org/t/p/w1280${backdropPath}`;
-  };
-
-  const formatReleaseYear = (releaseDate: string) => {
-    return new Date(releaseDate).getFullYear();
-  };
-
-  const formatRating = (rating: number) => {
-    return rating.toFixed(1);
-  };
 
   const handleImageLoad = () => {
     setImageLoaded(true);
@@ -45,9 +39,9 @@ const MovieDetail = ({ movie, onClose, category = "default" }: MovieDetailProps)
   return (
     <div className={`movie-detail movie-detail--${category}`}>
       <div className="movie-detail__backdrop">
-        {movie.backdrop_path && getBackdropUrl(movie.backdrop_path) && (
+        {movie.backdrop_path && getMovieBackdropUrl(movie.backdrop_path) && (
           <img
-            src={getBackdropUrl(movie.backdrop_path)!}
+            src={getMovieBackdropUrl(movie.backdrop_path)!}
             alt={`${movie.title} backdrop`}
             className="movie-detail__backdrop-image"
           />
@@ -85,7 +79,7 @@ const MovieDetail = ({ movie, onClose, category = "default" }: MovieDetailProps)
                 </div>
               ) : (
                 <img
-                  src={getImageUrl(movie.poster_path)}
+                  src={getMoviePosterUrl(movie.poster_path)}
                   alt={movie.title}
                   className={`movie-detail__poster-image ${
                     imageLoaded ? "loaded" : ""
@@ -111,7 +105,7 @@ const MovieDetail = ({ movie, onClose, category = "default" }: MovieDetailProps)
               <div className="movie-detail__meta-item">
                 <span className="movie-detail__meta-label">Year:</span>
                 <span className="movie-detail__meta-value">
-                  {formatReleaseYear(movie.release_date)}
+                  {formatReleaseYear(movie.release_date) || "N/A"}
                 </span>
               </div>
 

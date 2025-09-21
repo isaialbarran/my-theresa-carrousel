@@ -8,6 +8,8 @@ import {
   useWishlistActions,
   useIsInWishlist,
 } from "../../../application/store/appStore";
+import { getMoviePosterUrl } from "../../../shared/utils/image";
+import { formatRating } from "../../../shared/utils/format";
 import "./MovieDetailPage.scss";
 
 const MovieDetailPage = () => {
@@ -66,11 +68,7 @@ const MovieDetailPage = () => {
       <main className="main-content">
         <Card className="image-area">
           <img
-            src={
-              movie.poster_path
-                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                : "/placeholder-movie.jpg"
-            }
+            src={getMoviePosterUrl(movie.poster_path)}
             alt={movie.title}
             className="movie-poster"
           />
@@ -84,7 +82,9 @@ const MovieDetailPage = () => {
               <span className="release-date">
                 Released: {movie.release_date}
               </span>
-              <span className="rating">Rating: {movie.vote_average}/10</span>
+              <span className="rating">
+                Rating: {formatRating(movie.vote_average)}/10
+              </span>
               {movie.runtime && (
                 <span className="runtime">Runtime: {movie.runtime} min</span>
               )}

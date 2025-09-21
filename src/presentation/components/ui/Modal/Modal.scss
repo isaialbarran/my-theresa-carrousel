@@ -1,0 +1,210 @@
+@use '../../../../styles/themes/mixins' as *;
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: $z-index-modal;
+  @include flex-center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all $transition-base;
+
+  &__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--overlay);
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    background-color: var(--surface);
+    border-radius: $border-radius-xl;
+    box-shadow: $shadow-2xl;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.9) translateY(20px);
+    transition: transform $transition-base;
+
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--surface-variant);
+      border-radius: $border-radius-base;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: $border-radius-base;
+
+      &:hover {
+        background: var(--border-focus);
+      }
+    }
+  }
+
+  &__close-button {
+    position: absolute;
+    top: $spacing-3;
+    right: $spacing-3;
+    z-index: 2;
+    background-color: rgba(var(--surface-rgb), 0.9);
+    backdrop-filter: blur(4px);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    padding: 0;
+
+    &:hover {
+      background-color: var(--surface-variant);
+    }
+  }
+
+  // Size variants
+  &--small {
+    .modal__content {
+      width: 90%;
+      max-width: 400px;
+      margin: $spacing-4;
+
+      @include media-sm {
+        margin: $spacing-6;
+      }
+    }
+  }
+
+  &--medium {
+    .modal__content {
+      width: 90%;
+      max-width: 600px;
+      margin: $spacing-4;
+
+      @include media-sm {
+        margin: $spacing-6;
+      }
+    }
+  }
+
+  &--large {
+    .modal__content {
+      width: 95%;
+      max-width: 900px;
+      margin: $spacing-3;
+
+      @include media-sm {
+        width: 90%;
+        margin: $spacing-4;
+      }
+
+      @include media-lg {
+        margin: $spacing-6;
+      }
+    }
+  }
+
+  &--fullscreen {
+    .modal__content {
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      max-height: none;
+      margin: 0;
+      border-radius: 0;
+
+      @include media-sm {
+        width: 95%;
+        height: 95%;
+        margin: 2.5%;
+        border-radius: $border-radius-xl;
+      }
+    }
+  }
+}
+
+// Modal is open
+.modal {
+  opacity: 1;
+  visibility: visible;
+
+  .modal__content {
+    transform: scale(1) translateY(0);
+  }
+}
+
+// Prevent body scroll when modal is open
+body.modal-open {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width, 0);
+}
+
+// Animation for modal entrance
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalFadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+}
+
+// Focus management for accessibility
+.modal__content:focus {
+  outline: none;
+}
+
+// Dark mode specific adjustments
+[data-theme='dark'] .modal {
+  .modal__backdrop {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .modal {
+    transition: opacity $transition-fast;
+
+    .modal__content {
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .modal {
+    .modal__content {
+      border: 2px solid var(--border);
+    }
+
+    .modal__close-button {
+      border: 1px solid var(--border);
+    }
+  }
+}

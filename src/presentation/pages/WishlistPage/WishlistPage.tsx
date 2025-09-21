@@ -6,8 +6,14 @@ import MovieCard from "../../components/features/MovieCard";
 import MovieDetail from "../../components/features/MovieDetail";
 import Button from "../../components/ui/Button";
 import VirtualGrid from "../../components/ui/VirtualGrid";
-import { useWishlist, useWishlistActions, useWishlistCount } from "../../../application/store/appStore";
+import Modal from "../../components/ui/Modal";
+import {
+  useWishlist,
+  useWishlistActions,
+  useWishlistCount,
+} from "../../../application/store/appStore";
 import { useDebounce } from "../../hooks/useDebounce";
+import { formatReleaseYear } from "../../../shared/utils/format";
 import type { Movie } from "../../../domain/entities/Movie";
 import "./WishlistPage.scss";
 
@@ -22,18 +28,15 @@ const WishlistPage = () => {
   );
   const [searchQuery, setSearchQuery] = useState("");
 
-
   // Debounce search query to avoid excessive filtering
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
   const handleMovieClick = useCallback((movie: Movie) => {
     setSelectedMovie(movie);
-    document.body.classList.add("modal-open");
   }, []);
 
   const handleCloseDetail = useCallback(() => {
     setSelectedMovie(null);
-    document.body.classList.remove("modal-open");
   }, []);
 
   const handleClearWishlist = useCallback(() => {
@@ -91,8 +94,8 @@ const WishlistPage = () => {
         break;
       case "year":
         movies.sort((a, b) => {
-          const yearA = new Date(a.release_date || "").getFullYear();
-          const yearB = new Date(b.release_date || "").getFullYear();
+          const yearA = formatReleaseYear(a.release_date) || 0;
+          const yearB = formatReleaseYear(b.release_date) || 0;
           return yearB - yearA;
         });
         break;
@@ -254,21 +257,19 @@ const WishlistPage = () => {
           </div>
         )}
 
-        {selectedMovie && (
-          <div className="movie-detail-modal">
-            <div
-              className="movie-detail-modal__backdrop"
-              onClick={handleCloseDetail}
+        <Modal
+          isOpen={!!selectedMovie}
+          onClose={handleCloseDetail}
+          size="large"
+        >
+          {selectedMovie && (
+            <MovieDetail
+              movie={selectedMovie}
+              onClose={handleCloseDetail}
+              category="default"
             />
-            <div className="movie-detail-modal__content">
-              <MovieDetail
-                movie={selectedMovie}
-                onClose={handleCloseDetail}
-                category="default"
-              />
-            </div>
-          </div>
-        )}
+          )}
+        </Modal>
       </div>
     </PageLayout>
   );
