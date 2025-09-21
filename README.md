@@ -1,69 +1,138 @@
-# React + TypeScript + Vite
+# My Theresa Carrousel
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern movie discovery application built with React 19, TypeScript, and Server-Side Rendering (SSR) using Vite. Features streaming SSR, dynamic routing, and a clean architecture.
 
-Currently, two official plugins are available:
+## 🚀 Quick Start
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Prerequisites
 
-## Expanding the ESLint configuration
+- **Node.js** (v18.0.0 or higher)
+- **npm** (v8.0.0 or higher)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Installation
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. **Clone and install**
+   ```bash
+   git clone <https://github.com/isaialbarran/my-theresa-carrousel>
+   cd my-theresa-carrousel
+   npm install
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+2. **Environment setup**
+   ```bash
+   cp .env.example .env
+   # Edit .env and add your TMDB API credentials
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+3. **Start development**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open browser**
+   ```
+   http://localhost:5173
+   ```
+
+## 📋 Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start SSR development server |
+| `npm run build` | Production build |
+| `npm run preview` | Test production build locally |
+| `npm run lint` | Check code quality |
+| `npm run lint:fix` | Auto-fix linting issues |
+| `npm run test` | Run tests |
+| `npm run test:coverage` | Run tests with coverage |
+
+## 🏗️ Project Architecture
+
+```
+src/
+├── domain/              # Business entities and rules
+├── application/         # Use cases and hooks
+├── infrastructure/      # External dependencies
+├── presentation/        # UI components and pages
+└── shared/             # Shared utilities
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🌟 Features
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **🎬 Movie Discovery**: Browse popular, top-rated, and upcoming movies
+- **❤️ Wishlist Management**: Save and manage favorite movies
+- **🔍 Search & Filter**: Find movies by title or description
+- **📱 Responsive Design**: Optimized for all devices
+- **🚀 Server-Side Rendering**: Fast initial page loads
+- **⚡ Performance**: Virtual scrolling and optimized rendering
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🔧 Development
+
+### Code Quality
+Always run before committing:
+```bash
+npm run lint:fix
+npm run test
 ```
+
+### Testing URLs
+- Homepage: `http://localhost:5173/`
+- Wishlist: `http://localhost:5173/wishlist`
+- Movie Detail: `http://localhost:5173/movie/123`
+
+## 🚀 Production
+
+### Build
+```bash
+npm run build
+```
+
+Creates optimized bundles in `dist/` folder.
+
+### Environment Variables
+
+#### Required TMDB API Variables
+| Variable | Description | How to get |
+|----------|-------------|------------|
+| `VITE_TMDB_API_KEY` | Your TMDB API key | [Get from TMDB](https://www.themoviedb.org/settings/api) |
+| `VITE_TMDB_ACCESS_TOKEN` | Your TMDB access token | [Get from TMDB](https://www.themoviedb.org/settings/api) |
+| `VITE_TMDB_BASE_URL` | TMDB API base URL | `https://api.themoviedb.org/3` |
+
+#### Optional Variables
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PORT` | `5173` | Server port |
+| `NODE_ENV` | `development` | Environment mode |
+
+## 🛠️ Troubleshooting
+
+### Port Already in Use
+```bash
+npx kill-port 5173
+# Or use different port
+PORT=3000 npm run dev
+```
+
+### Build Issues
+```bash
+npm run build:clean
+npm install
+npm run build
+```
+
+### Development Server Issues
+1. Check Node.js version: `node --version` (≥18)
+2. Clear cache: `npm cache clean --force`
+3. Reinstall: `rm -rf node_modules && npm install`
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/name`
+3. Run quality checks: `npm run lint:fix && npm run test`
+4. Commit and push changes
+5. Open Pull Request
+
+## 📄 License
+
+This project is private and proprietary.

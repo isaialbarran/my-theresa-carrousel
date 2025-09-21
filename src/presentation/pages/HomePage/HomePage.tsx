@@ -35,7 +35,7 @@ const HomePage = () => {
   const error = sections.find((section) => section.error)?.error ?? null;
 
   const handleMovieClick = (movie: Movie, category?: "popular" | "top-rated" | "upcoming") => {
-    const categoryParam = category ? `?category=${category}` : '';
+    const categoryParam = category ? `?category=${category}` : "";
     navigate(`/movie/${movie.id}${categoryParam}`);
   };
 

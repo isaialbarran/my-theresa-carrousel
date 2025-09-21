@@ -2,9 +2,9 @@ import { memo, useState, useEffect, useRef, useMemo, useCallback } from "react";
 import type { ReactNode } from "react";
 import "./VirtualGrid.scss";
 
-interface VirtualGridProps {
-  items: any[];
-  renderItem: (item: any, index: number) => ReactNode;
+interface VirtualGridProps<T = unknown> {
+  items: T[];
+  renderItem: (item: T, index: number) => ReactNode;
   itemHeight: number;
   itemWidth: number;
   containerHeight: number;
@@ -13,7 +13,7 @@ interface VirtualGridProps {
 }
 
 const VirtualGrid = memo(
-  ({
+  <T,>({
     items,
     renderItem,
     itemHeight,
@@ -21,7 +21,7 @@ const VirtualGrid = memo(
     containerHeight,
     gap = 24,
     className = "",
-  }: VirtualGridProps) => {
+  }: VirtualGridProps<T>) => {
     const [scrollTop, setScrollTop] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
 
