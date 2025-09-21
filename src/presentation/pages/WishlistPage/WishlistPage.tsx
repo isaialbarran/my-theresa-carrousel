@@ -3,10 +3,8 @@ import { useNavigate } from "react-router-dom";
 import type { ReactNode } from "react";
 import PageLayout from "../../components/layout/PageLayout/PageLayout";
 import MovieCard from "../../components/features/MovieCard";
-import MovieDetail from "../../components/features/MovieDetail";
 import Button from "../../components/ui/Button";
 import VirtualGrid from "../../components/ui/VirtualGrid";
-import Modal from "../../components/ui/Modal";
 import {
   useWishlist,
   useWishlistActions,
@@ -22,7 +20,6 @@ const WishlistPage = () => {
   const wishlistCount = useWishlistCount();
   const { clearWishlist } = useWishlistActions();
   const navigate = useNavigate();
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [sortBy, setSortBy] = useState<"added" | "title" | "rating" | "year">(
     "added",
   );
@@ -32,12 +29,9 @@ const WishlistPage = () => {
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
   const handleMovieClick = useCallback((movie: Movie) => {
-    setSelectedMovie(movie);
-  }, []);
+    navigate(`/movie/${movie.id}`);
+  }, [navigate]);
 
-  const handleCloseDetail = useCallback(() => {
-    setSelectedMovie(null);
-  }, []);
 
   const handleClearWishlist = useCallback(() => {
     if (
@@ -257,19 +251,6 @@ const WishlistPage = () => {
           </div>
         )}
 
-        <Modal
-          isOpen={!!selectedMovie}
-          onClose={handleCloseDetail}
-          size="large"
-        >
-          {selectedMovie && (
-            <MovieDetail
-              movie={selectedMovie}
-              onClose={handleCloseDetail}
-              category="default"
-            />
-          )}
-        </Modal>
       </div>
     </PageLayout>
   );

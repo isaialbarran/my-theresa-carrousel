@@ -1,16 +1,13 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PageLayout from "../../components/layout/PageLayout/PageLayout";
 import MovieCarousel from "../../components/features/MovieCarousel";
-import MovieDetail from "../../components/features/MovieDetail";
-import Modal from "../../components/ui/Modal";
 import { useMoviesByCategory } from "../../../application/hooks/useMoviesByCategory";
 import type { Movie } from "../../../domain/entities/Movie";
 import { MovieCategory } from "../../../domain/entities/Category";
 import "./HomePage.scss";
 
 const HomePage = () => {
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [selectedMovieCategory, setSelectedMovieCategory] = useState<"popular" | "top-rated" | "upcoming" | "default">("default");
+  const navigate = useNavigate();
 
   // Use the new simplified hooks
   const { movies: popularMovies, loading: popularLoading, error: popularError } = useMoviesByCategory(MovieCategory.POPULAR);
@@ -23,14 +20,9 @@ const HomePage = () => {
 
 
   const handleMovieClick = (movie: Movie, category: "popular" | "top-rated" | "upcoming" | "default" = "default") => {
-    setSelectedMovie(movie);
-    setSelectedMovieCategory(category);
+    navigate(`/movie/${movie.id}`);
   };
 
-  const handleCloseDetail = () => {
-    setSelectedMovie(null);
-    setSelectedMovieCategory("default");
-  };
 
   if (loading) {
     return (
@@ -85,19 +77,6 @@ const HomePage = () => {
         category="upcoming"
       />
 
-      <Modal
-        isOpen={!!selectedMovie}
-        onClose={handleCloseDetail}
-        size="large"
-      >
-        {selectedMovie && (
-          <MovieDetail
-            movie={selectedMovie}
-            onClose={handleCloseDetail}
-            category={selectedMovieCategory}
-          />
-        )}
-      </Modal>
     </PageLayout>
   );
 };

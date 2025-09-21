@@ -312,10 +312,6 @@
   }
 }
 
-// Prevent scrolling when modal is open
-body.modal-open {
-  overflow: hidden;
-}
 
 // Category-specific styling for wishlist items
 .movie-card--wishlist {
