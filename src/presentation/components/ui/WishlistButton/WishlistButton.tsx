@@ -21,7 +21,8 @@ const WishlistButton = ({
   const isWishlisted = useIsInWishlist(movie.id);
   const { toggleWishlist } = useWishlistActions();
 
-  const handleClick = () => {
+  const handleClick = (e?: React.MouseEvent<HTMLButtonElement>) => {
+    e?.stopPropagation(); // Prevent event bubbling to parent card
     toggleWishlist(movie);
   };
 

@@ -14,3 +14,194 @@
 .additional-info {
   margin-top: 1rem;
 }
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+// Category-specific styles for movie detail page
+.movie-detail-page {
+  // Popular movies - Energy/Vibrant theme (Coral Red)
+  &--popular {
+    .movie-title--popular {
+      font-family: 'Inter', 'Arial', sans-serif;
+      font-weight: 800;
+      color: #e74c3c;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      text-shadow: 0 2px 4px rgba(231, 76, 60, 0.2);
+      position: relative;
+
+      &::before {
+        content: '🔥 ';
+        margin-right: 8px;
+        font-size: 1.1em;
+      }
+    }
+
+    .wishlist-btn--popular {
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
+      border-color: #e74c3c !important;
+      color: white !important;
+      font-weight: 600 !important;
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.25) !important;
+      transition: all 0.3s ease !important;
+
+      &:hover {
+        background: linear-gradient(135deg, #c0392b 0%, #a93226 100%) !important;
+        border-color: #c0392b !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(231, 76, 60, 0.35) !important;
+      }
+    }
+
+    .back-btn--popular {
+      background-color: #ec7063 !important;
+      border-color: #ec7063 !important;
+      color: white !important;
+      font-weight: 500 !important;
+      transition: all 0.3s ease !important;
+
+      &:hover {
+        background-color: #e74c3c !important;
+        border-color: #e74c3c !important;
+        transform: translateY(-1px) !important;
+      }
+    }
+  }
+
+  // Top Rated movies - Premium/Elegant theme (Golden)
+  &--top-rated {
+    .movie-title--top-rated {
+      font-family: 'Playfair Display', 'Georgia', serif;
+      font-weight: 700;
+      font-style: italic;
+      color: #f39c12;
+      text-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+      letter-spacing: 0.5px;
+      position: relative;
+
+      &::before {
+        content: '⭐ ';
+        margin-right: 8px;
+        font-size: 1.2em;
+        color: #f1c40f;
+        filter: drop-shadow(0 0 3px rgba(241, 196, 15, 0.5));
+      }
+    }
+
+    .wishlist-btn--top-rated {
+      background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important;
+      border-color: #f39c12 !important;
+      color: white !important;
+      font-weight: 600 !important;
+      box-shadow: 0 4px 15px rgba(243, 156, 18, 0.25) !important;
+      transition: all 0.3s ease !important;
+
+      &:hover {
+        background: linear-gradient(135deg, #e67e22 0%, #d35400 100%) !important;
+        border-color: #e67e22 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(243, 156, 18, 0.35) !important;
+      }
+    }
+
+    .back-btn--top-rated {
+      background-color: #f7dc6f !important;
+      border-color: #f7dc6f !important;
+      color: #7d6608 !important;
+      font-weight: 500 !important;
+      transition: all 0.3s ease !important;
+
+      &:hover {
+        background-color: #f4d03f !important;
+        border-color: #f4d03f !important;
+        color: #6c5b07 !important;
+        transform: translateY(-1px) !important;
+      }
+    }
+  }
+
+  // Upcoming movies - Modern/Tech theme (Purple-Blue)
+  &--upcoming {
+    .movie-title--upcoming {
+      font-family: 'Inter', 'Arial', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #8e44ad;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 8px rgba(142, 68, 173, 0.3);
+      position: relative;
+
+      &::after {
+        content: ' [NEW]';
+        font-size: 0.7em;
+        color: #3498db;
+        margin-left: 10px;
+        animation: pulse 2s infinite;
+        font-weight: 600;
+      }
+    }
+
+    .wishlist-btn--upcoming {
+      background: linear-gradient(135deg, #8e44ad 0%, #732d91 100%) !important;
+      border-color: #8e44ad !important;
+      color: white !important;
+      font-weight: 600 !important;
+      box-shadow: 0 4px 15px rgba(142, 68, 173, 0.25) !important;
+      transition: all 0.3s ease !important;
+
+      &:hover {
+        background: linear-gradient(135deg, #732d91 0%, #5b2c6f 100%) !important;
+        border-color: #732d91 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(142, 68, 173, 0.35) !important;
+      }
+    }
+
+    .back-btn--upcoming {
+      background-color: #bb8fce !important;
+      border-color: #bb8fce !important;
+      color: white !important;
+      font-weight: 500 !important;
+      transition: all 0.3s ease !important;
+
+      &:hover {
+        background-color: #a569bd !important;
+        border-color: #a569bd !important;
+        transform: translateY(-1px) !important;
+      }
+    }
+  }
+
+  // Default style - Clean/Classic theme
+  &--default {
+    .movie-title--default {
+      font-family: 'Inter', 'Arial', sans-serif;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.5px;
+    }
+
+    .wishlist-btn--default,
+    .back-btn--default {
+      transition: all 0.3s ease !important;
+
+      &:hover {
+        transform: translateY(-1px) !important;
+      }
+    }
+  }
+}
+
+// Animation for upcoming movies
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

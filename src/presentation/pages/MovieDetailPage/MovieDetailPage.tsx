@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import Card from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
@@ -15,11 +15,15 @@ import "./MovieDetailPage.scss";
 const MovieDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toggleWishlist } = useWishlistActions();
 
   const movieId = id ? parseInt(id, 10) : undefined;
   const { movie, loading, error } = useMovieDetails(movieId);
   const isInWishlist = useIsInWishlist(movieId || 0);
+
+  // Get category from URL params, default to "default"
+  const movieCategory = (searchParams.get('category') as "popular" | "top-rated" | "upcoming") || "default";
 
   useEffect(() => {
     if (!movieId || isNaN(movieId)) {
@@ -65,7 +69,9 @@ const MovieDetailPage = () => {
 
   return (
     <PageLayout>
-      <main className="main-content">
+      <main
+        className={`main-content movie-detail-page movie-detail-page--${movieCategory}`}
+      >
         <Card className="image-area">
           <img
             src={getMoviePosterUrl(movie.poster_path)}
@@ -76,7 +82,9 @@ const MovieDetailPage = () => {
 
         <Card className="button-description-area">
           <div className="movie-info">
-            <h1 className="movie-title">{movie.title}</h1>
+            <h1 className={`movie-title movie-title--${movieCategory}`}>
+              {movie.title}
+            </h1>
             <p className="movie-description">{movie.overview}</p>
             <div className="movie-meta">
               <span className="release-date">
@@ -94,10 +102,16 @@ const MovieDetailPage = () => {
             <Button
               onClick={handleToggleWishlist}
               variant={isInWishlist ? "secondary" : "primary"}
+              className={`wishlist-btn wishlist-btn--${movieCategory}`}
             >
               {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
             </Button>
-            <Button onClick={handleGoBack} variant="secondary">
+
+            <Button
+              onClick={handleGoBack}
+              variant="secondary"
+              className={`back-btn back-btn--${movieCategory}`}
+            >
               Go Back
             </Button>
           </div>

@@ -34,8 +34,9 @@ const HomePage = () => {
   const loading = sections.some((section) => section.loading);
   const error = sections.find((section) => section.error)?.error ?? null;
 
-  const handleMovieClick = (movie: Movie) => {
-    navigate(`/movie/${movie.id}`);
+  const handleMovieClick = (movie: Movie, category?: "popular" | "top-rated" | "upcoming") => {
+    const categoryParam = category ? `?category=${category}` : '';
+    navigate(`/movie/${movie.id}${categoryParam}`);
   };
 
   if (loading) {
@@ -70,7 +71,7 @@ const HomePage = () => {
           movies={movies}
           loading={sectionLoading}
           error={sectionError}
-          onMovieClick={handleMovieClick}
+          onMovieClick={(movie) => handleMovieClick(movie, key)}
           cardSize="medium"
           category={key}
         />

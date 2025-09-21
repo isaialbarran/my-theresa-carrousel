@@ -80,37 +80,19 @@
     // Responsive grid behavior
     @include media-max-sm {
       gap: $spacing-3;
-      scroll-snap-type: x mandatory;
-    }
-
-    @include media-sm {
-      gap: $spacing-4;
     }
   }
 
   &__item {
     flex-shrink: 0;
-    scroll-snap-align: start;
+    width: 200px;
 
-    // Responsive sizing
     @include media-max-sm {
       width: 160px;
     }
 
-    @include media-sm {
-      width: 180px;
-    }
-
-    @include media-md {
-      width: 200px;
-    }
-
     @include media-lg {
       width: 220px;
-    }
-
-    @include media-xl {
-      width: 240px;
     }
   }
 
@@ -128,10 +110,6 @@
 
     @include media-max-sm {
       width: 160px;
-    }
-
-    @include media-sm {
-      width: 180px;
     }
 
     &-image {
@@ -202,36 +180,6 @@
     }
   }
 
-  // Mobile scroll indicators
-  &__indicators {
-    display: none;
-    margin-top: $spacing-4;
-    padding: 0 $spacing-4;
-
-    @include media-max-md {
-      display: block;
-    }
-  }
-
-  &__indicator-track {
-    width: 100%;
-    height: 4px;
-    background-color: var(--border-light);
-    border-radius: $border-radius-full;
-    position: relative;
-    overflow: hidden;
-  }
-
-  &__indicator-thumb {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 30%;
-    background-color: var(--primary);
-    border-radius: $border-radius-full;
-    transition: transform $transition-slow;
-  }
 
   // Responsive adjustments
   @include media-max-sm {
@@ -251,48 +199,20 @@
     }
   }
 
-  // Hover effects for desktop
-  @include media-lg {
-    &__grid {
-      &:hover {
-        .movie-carousel__item {
-          opacity: 0.7;
-          transform: scale(0.95);
-          transition: all $transition-base;
 
-          &:hover {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-      }
+  // Remove default focus outline
+  &__grid {
+    outline: none;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: none;
     }
   }
 
-  // Focus management for accessibility
-  &__grid:focus-within {
-    outline: 2px solid var(--border-focus);
-    outline-offset: 2px;
-    border-radius: $border-radius-lg;
-  }
-
-  // Print styles
-  @media print {
-    &__navigation {
-      display: none;
-    }
-
-    &__grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: $spacing-4;
-      overflow: visible;
-    }
-
-    &__indicators {
-      display: none;
-    }
-  }
 }
 
 // Animation for smooth appearance
@@ -311,130 +231,44 @@
   animation: carousel-fade-in 0.6s ease-out;
 }
 
-// Custom focus styles for better accessibility
-.movie-carousel__item:focus-within {
-  .movie-carousel__card {
-    transform: scale(1.02);
-    box-shadow: 0 0 0 2px var(--border-focus);
+// Remove focus outline from carousel items
+.movie-carousel__item {
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:focus-within {
+    outline: none;
   }
 }
 
-// Category-specific styles
+// Simplified category styles
 .movie-carousel {
-  // Popular movies - Fire theme
-  &--popular {
-    .movie-carousel__title {
-      background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .movie-carousel__icon {
-      animation: fire-pulse 2s ease-in-out infinite;
-    }
-
-    .movie-carousel__nav-button {
-      &:hover:not(:disabled) {
-        background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(247, 147, 30, 0.1) 100%);
-        border-color: #ff6b35;
-      }
-    }
-
-    .movie-carousel__indicator-thumb {
-      background: linear-gradient(90deg, #ff6b35 0%, #f7931e 100%);
-    }
+  &--popular .movie-carousel__icon {
+    animation: simple-pulse 2s ease-in-out infinite;
   }
 
-  // Top Rated movies - Star/Gold theme
-  &--top-rated {
-    .movie-carousel__title {
-      background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .movie-carousel__icon {
-      animation: star-shine 3s ease-in-out infinite;
-    }
-
-    .movie-carousel__nav-button {
-      &:hover:not(:disabled) {
-        background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 179, 71, 0.1) 100%);
-        border-color: #ffd700;
-      }
-    }
-
-    .movie-carousel__indicator-thumb {
-      background: linear-gradient(90deg, #ffd700 0%, #ffb347 100%);
-    }
+  &--top-rated .movie-carousel__icon {
+    animation: simple-pulse 2.5s ease-in-out infinite;
   }
 
-  // Upcoming movies - Cinema/Purple theme
-  &--upcoming {
-    .movie-carousel__title {
-      background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .movie-carousel__icon {
-      animation: cinema-roll 4s ease-in-out infinite;
-    }
-
-    .movie-carousel__nav-button {
-      &:hover:not(:disabled) {
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
-        border-color: #8b5cf6;
-      }
-    }
-
-    .movie-carousel__indicator-thumb {
-      background: linear-gradient(90deg, #8b5cf6 0%, #a855f7 100%);
-    }
+  &--upcoming .movie-carousel__icon {
+    animation: simple-pulse 3s ease-in-out infinite;
   }
 }
 
-// Category-specific animations
-@keyframes fire-pulse {
+// Simplified icon animations
+@keyframes simple-pulse {
   0%, 100% {
     transform: scale(1);
-    filter: drop-shadow(0 2px 4px rgba(255, 107, 53, 0.3));
   }
   50% {
-    transform: scale(1.1);
-    filter: drop-shadow(0 4px 8px rgba(255, 107, 53, 0.5));
-  }
-}
-
-@keyframes star-shine {
-  0%, 100% {
-    transform: scale(1) rotate(0deg);
-    filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.3));
-  }
-  25% {
-    transform: scale(1.05) rotate(-5deg);
-    filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.4));
-  }
-  75% {
-    transform: scale(1.05) rotate(5deg);
-    filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.4));
-  }
-}
-
-@keyframes cinema-roll {
-  0%, 100% {
-    transform: scale(1);
-    filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.3));
-  }
-  33% {
-    transform: scale(1.02) rotateY(10deg);
-    filter: drop-shadow(0 3px 6px rgba(139, 92, 246, 0.4));
-  }
-  66% {
-    transform: scale(1.02) rotateY(-10deg);
-    filter: drop-shadow(0 3px 6px rgba(139, 92, 246, 0.4));
+    transform: scale(1.05);
   }
 }
