@@ -17,5 +17,9 @@
       "dest": "/server/index.js"
     }
   ],
-  "installCommand": "npm ci --only=production"
+  "installCommand": "npm ci --only=production",
+  "env": {
+    "NODE_ENV": "production",
+    "VITE_TMDB_BASE_URL": "https://api.themoviedb.org/3"
+  }
 }
