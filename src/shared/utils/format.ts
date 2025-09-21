@@ -1,7 +1,8 @@
 export const formatReleaseYear = (releaseDate: string | null): number | null => {
   if (!releaseDate) return null;
   try {
-    return new Date(releaseDate).getFullYear();
+    const year = new Date(releaseDate).getFullYear();
+    return isNaN(year) ? null : year;
   } catch {
     return null;
   }

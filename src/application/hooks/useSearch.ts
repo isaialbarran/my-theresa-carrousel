@@ -66,13 +66,12 @@ export const useSearch = (): UseSearchReturn => {
 
   // Use useAsyncQuery for handling search requests
   const {
-    data: _searchData,
     loading,
     error,
     execute,
     reset,
   } = useAsyncQuery<SearchResult, SearchParams>(searchFunction, {
-    onSuccess: (data) => {
+    onSuccess: (data: SearchResult) => {
       setPagination({
         currentPage: data.currentPage,
         totalPages: data.totalPages,

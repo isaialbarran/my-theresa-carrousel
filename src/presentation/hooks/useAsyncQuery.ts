@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 
-interface UseAsyncQueryOptions {
-  onSuccess?: (data: any) => void;
+interface UseAsyncQueryOptions<T> {
+  onSuccess?: (data: T) => void;
   onError?: (error: Error) => void;
 }
 
@@ -20,7 +20,7 @@ interface UseAsyncQueryReturn<T, P> {
  */
 export function useAsyncQuery<T, P>(
   asyncFunction: (params: P) => Promise<T>,
-  options: UseAsyncQueryOptions = {},
+  options: UseAsyncQueryOptions<T> = {},
 ): UseAsyncQueryReturn<T, P> {
   const { onSuccess, onError } = options;
 

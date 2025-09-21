@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 import "./VirtualGrid.scss";
 
 interface VirtualGridProps {
-  items: any[];
-  renderItem: (item: any, index: number) => ReactNode;
+  items: any[]; // eslint-disable-line @typescript-eslint/no-explicit-any
+  renderItem: (item: any, index: number) => ReactNode; // eslint-disable-line @typescript-eslint/no-explicit-any
   itemHeight: number;
   itemWidth: number;
   containerHeight: number;

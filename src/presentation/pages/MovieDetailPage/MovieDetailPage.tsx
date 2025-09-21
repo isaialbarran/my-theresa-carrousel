@@ -23,7 +23,7 @@ const MovieDetailPage = () => {
   const isInWishlist = useIsInWishlist(movieId || 0);
 
   // Get category from URL params, default to "default"
-  const movieCategory = (searchParams.get('category') as "popular" | "top-rated" | "upcoming") || "default";
+  const movieCategory = (searchParams.get("category") as "popular" | "top-rated" | "upcoming") || "default";
 
   useEffect(() => {
     if (!movieId || isNaN(movieId)) {

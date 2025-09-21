@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 
-interface UseAsyncDataOptions {
+interface UseAsyncDataOptions<T> {
   immediate?: boolean;
-  onSuccess?: (data: any) => void;
+  onSuccess?: (data: T) => void;
   onError?: (error: Error) => void;
 }
 
@@ -19,7 +19,7 @@ interface UseAsyncDataReturn<T> {
  */
 export function useAsyncData<T>(
   asyncFunction: () => Promise<T>,
-  options: UseAsyncDataOptions = {},
+  options: UseAsyncDataOptions<T> = {},
 ): UseAsyncDataReturn<T> {
   const { immediate = true, onSuccess, onError } = options;
 
