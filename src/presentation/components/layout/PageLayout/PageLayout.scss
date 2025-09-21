@@ -1,4 +1,76 @@
-// PageLayout specific styles
+@use '../../../../styles/themes/mixins' as *;
+
 .page-layout {
-  // Any layout-specific styles can go here
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background);
+  color: var(--text-primary);
+
+  &__header {
+    flex: 0 0 auto;
+    position: sticky;
+    top: 0;
+    z-index: $z-index-sticky;
+  }
+
+  &__main {
+    flex: 1 1 auto;
+    @include container;
+    padding-top: $spacing-6;
+    padding-bottom: $spacing-8;
+
+    @include media-sm {
+      padding-top: $spacing-8;
+      padding-bottom: $spacing-10;
+    }
+
+    @include media-lg {
+      padding-top: $spacing-10;
+      padding-bottom: $spacing-12;
+    }
+  }
+
+  // Variant for full-width content
+  &--full-width {
+    .page-layout__main {
+      max-width: none;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  // Variant for centered content
+  &--centered {
+    .page-layout__main {
+      @include flex-center;
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  // Variant with no padding
+  &--no-padding {
+    .page-layout__main {
+      padding: 0;
+    }
+  }
+}
+
+// Loading state
+.page-layout--loading {
+  .page-layout__main {
+    @include flex-center;
+    min-height: 50vh;
+  }
+}
+
+// Error state
+.page-layout--error {
+  .page-layout__main {
+    @include flex-center;
+    flex-direction: column;
+    min-height: 50vh;
+    text-align: center;
+  }
 }
