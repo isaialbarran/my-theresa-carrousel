@@ -28,17 +28,16 @@ This project requires TMDB API credentials to function.
 4.  **Edit the `.env` file:**
     Open the newly created `.env` file and add your credentials.
 
-    | Variable                      | Description                      | Example Value                        |
-    | ----------------------------- | -------------------------------- | ------------------------------------ |
-    | `VITE_TMDB_API_KEY`           | Your TMDB API key                | `YOUR_API_KEY_HERE`                  |
-    | `VITE_TMDB_ACCESS_TOKEN`      | Your TMDB access token           | `YOUR_ACCESS_TOKEN_HERE`             |
-    | `VITE_TMDB_BASE_URL`          | TMDB API base URL                | `https://api.themoviedb.org/3`       |
+    VITE_TMDB_API_KEY=YOUR_API_KEY_HERE
+    VITE_TMDB_ACCESS_TOKEN=YOUR_ACCESS_TOKEN_HERE
+    VITE_TMDB_BASE_URL=https://api.themoviedb.org/3
+
 
 ### Installation and Execution
 
 1.  **Clone the repository and install dependencies:**
     ```bash
-    git clone [https://github.com/isaialbarran/my-theresa-carrousel](https://github.com/isaialbarran/my-theresa-carrousel)
+    git clone https://github.com/isaialbarran/my-theresa-carrousel
     cd my-theresa-carrousel
     npm install
     ```
