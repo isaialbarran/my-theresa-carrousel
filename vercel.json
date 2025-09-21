@@ -5,7 +5,7 @@
       "src": "server/index.js",
       "use": "@vercel/node@3.0.7",
       "config": {
-        "nodeVersion": "18.x"
+        "includeFiles": ["dist/**"]
       }
     }
   ],
@@ -19,6 +19,8 @@
       "dest": "/server/index.js"
     }
   ],
+  "buildCommand": "npm run vercel-build",
+  "installCommand": "npm install",
   "env": {
     "NODE_ENV": "production",
     "VITE_TMDB_BASE_URL": "https://api.themoviedb.org/3"
