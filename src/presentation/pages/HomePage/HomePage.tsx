@@ -6,23 +6,37 @@ import type { Movie } from "../../../domain/entities/Movie";
 import { MovieCategory } from "../../../domain/entities/Category";
 import "./HomePage.scss";
 
+type CarouselCategory = "popular" | "top-rated" | "upcoming";
+
+const SECTIONS: Array<{
+  key: CarouselCategory;
+  label: string;
+  category: MovieCategory;
+}> = [
+  { key: "popular", label: "Popular Movies", category: MovieCategory.POPULAR },
+  { key: "top-rated", label: "Top Rated Movies", category: MovieCategory.TOP_RATED },
+  { key: "upcoming", label: "Upcoming Movies", category: MovieCategory.UPCOMING },
+];
+
 const HomePage = () => {
   const navigate = useNavigate();
 
-  // Use the new simplified hooks
-  const { movies: popularMovies, loading: popularLoading, error: popularError } = useMoviesByCategory(MovieCategory.POPULAR);
-  const { movies: topRatedMovies, loading: topRatedLoading, error: topRatedError } = useMoviesByCategory(MovieCategory.TOP_RATED);
-  const { movies: upcomingMovies, loading: upcomingLoading, error: upcomingError } = useMoviesByCategory(MovieCategory.UPCOMING);
+  const popular = useMoviesByCategory(MovieCategory.POPULAR);
+  const topRated = useMoviesByCategory(MovieCategory.TOP_RATED);
+  const upcoming = useMoviesByCategory(MovieCategory.UPCOMING);
 
-  // Aggregate loading and error states
-  const loading = popularLoading || topRatedLoading || upcomingLoading;
-  const error = popularError || topRatedError || upcomingError;
+  const sections = [
+    { ...SECTIONS[0], ...popular },
+    { ...SECTIONS[1], ...topRated },
+    { ...SECTIONS[2], ...upcoming },
+  ];
 
+  const loading = sections.some((section) => section.loading);
+  const error = sections.find((section) => section.error)?.error ?? null;
 
-  const handleMovieClick = (movie: Movie, category: "popular" | "top-rated" | "upcoming" | "default" = "default") => {
+  const handleMovieClick = (movie: Movie) => {
     navigate(`/movie/${movie.id}`);
   };
-
 
   if (loading) {
     return (
@@ -49,34 +63,18 @@ const HomePage = () => {
 
   return (
     <PageLayout>
-      <MovieCarousel
-        label="Popular Movies"
-        movies={popularMovies}
-        loading={loading}
-        error={error}
-        onMovieClick={(movie) => handleMovieClick(movie, "popular")}
-        cardSize="medium"
-        category="popular"
-      />
-      <MovieCarousel
-        label="Top Rated Movies"
-        movies={topRatedMovies}
-        loading={loading}
-        error={error}
-        onMovieClick={(movie) => handleMovieClick(movie, "top-rated")}
-        cardSize="medium"
-        category="top-rated"
-      />
-      <MovieCarousel
-        label="Upcoming Movies"
-        movies={upcomingMovies}
-        loading={loading}
-        error={error}
-        onMovieClick={(movie) => handleMovieClick(movie, "upcoming")}
-        cardSize="medium"
-        category="upcoming"
-      />
-
+      {sections.map(({ key, label, movies, loading: sectionLoading, error: sectionError }) => (
+        <MovieCarousel
+          key={key}
+          label={label}
+          movies={movies}
+          loading={sectionLoading}
+          error={sectionError}
+          onMovieClick={handleMovieClick}
+          cardSize="medium"
+          category={key}
+        />
+      ))}
     </PageLayout>
   );
 };
