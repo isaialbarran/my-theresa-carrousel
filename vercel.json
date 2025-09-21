@@ -1,14 +1,12 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "server/index.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["dist/**"]
-      }
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "functions": {
+    "server/index.js": {
+      "runtime": "@vercel/node@3"
     }
-  ],
+  },
   "routes": [
     {
       "src": "/assets/(.*)",
@@ -19,7 +17,5 @@
       "dest": "/server/index.js"
     }
   ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  "installCommand": "npm ci --only=production"
 }
